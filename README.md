@@ -1,3 +1,3 @@
 # online-shop
-#Online shopping
+#Online shopping. 
 It is created based on Python, Html, CSS, JavaScript, and .... .
