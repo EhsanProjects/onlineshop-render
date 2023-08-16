@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title xmlns="http://www.w3.org/1999/html">Admin Products</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Admin Products</h1>
+    <table >
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Active</th>
+        </tr>
+
+        {% for p in products %}
+            <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.description }}</td>
+            <td>{{ p.price }}</td>
+            <td>{{ "Yes" if p.active == 1 else "No" }}</td>
+            </tr>
+        {% endfor %}
+
+
+    </table>
+    <form action="#" method="POST">
+        <input type="text" name="name" placeholder="Product Name"><br>
+        <textarea name="description" placeholder="Description"></textarea><br>
+        <input type="number" name="price" placeholder="Product Price"><br>
+        <label>Active: </label><input type="checkbox" value="1" name="active"><br>
+        <input type="submit">
+    </form>
+{% endblock %}
+
+
+
