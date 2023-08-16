@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>Edit Product</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Edit Product</h1>
+
+
+    <form action="#" method="POST">
+        <input type="text" name="name" value="{{ product.name }}" placeholder="Product Name"><br>
+        <textarea name="description"  placeholder="Description">{{ product.description }}</textarea><br>
+        <input type="number" name="price" value="{{ product.price }}" placeholder="Product Price"><br>
+        <label>Active: </label><input type="checkbox" value="1" name="active" {{ "checked" if product.active == 1  }}><br>
+        <input type="submit">
+    </form>
+{% endblock %}
+
+
+

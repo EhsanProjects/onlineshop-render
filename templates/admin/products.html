@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <title xmlns="http://www.w3.org/1999/html">Admin Products</title>
+    <title>Admin Products</title>
 {% endblock %}
 
 {% block body %}
@@ -12,6 +12,7 @@
             <th>Description</th>
             <th>Price</th>
             <th>Active</th>
+            <th>Edit</th>
         </tr>
 
         {% for p in products %}
@@ -20,6 +21,7 @@
             <td>{{ p.description }}</td>
             <td>{{ p.price }}</td>
             <td>{{ "Yes" if p.active == 1 else "No" }}</td>
+            <td><a href="/admin/dashboard/edit-product/{{ p.id }}">Edit</a> </td>
             </tr>
         {% endfor %}
 
