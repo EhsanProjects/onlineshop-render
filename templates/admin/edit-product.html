@@ -9,6 +9,7 @@
 
 
     <form action="#" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <input type="text" name="name" value="{{ product.name }}" placeholder="Product Name"><br>
         <textarea name="description"  placeholder="Description">{{ product.description }}</textarea><br>
         <input type="number" name="price" value="{{ product.price }}" placeholder="Product Price"><br>

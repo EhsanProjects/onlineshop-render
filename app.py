@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_wtf.csrf import CSRFProtect
 import config
 import extensions
 from blueprints.general import app as general
@@ -13,7 +14,7 @@ extensions.db.init_app(app)
 app.register_blueprint(general)
 app.register_blueprint(admin)
 app.register_blueprint(user)
-
+csrf = CSRFProtect(app)
 with app.app_context():
     extensions.db.create_all()
 
