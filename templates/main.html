@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>Ehsan Online Shopping</title>
+{% endblock %}
+
+{% block body %}
+{% for p in products %}
+    {{ p.name }}
+    {% endfor %}
+
+{% endblock %}
