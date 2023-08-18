@@ -7,9 +7,10 @@
 {% block body %}
     <h1>Edit Product</h1>
 
-
-    <form action="#" method="POST">
+    <td><img style="width: 60px" src="/static/cover/{{ product.id }}.jpg"></td>
+    <form action="#" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <label>Cover: </label><input type="file" name="cover"><br>
         <input type="text" name="name" value="{{ product.name }}" placeholder="Product Name"><br>
         <textarea name="description"  placeholder="Description">{{ product.description }}</textarea><br>
         <input type="number" name="price" value="{{ product.price }}" placeholder="Product Price"><br>

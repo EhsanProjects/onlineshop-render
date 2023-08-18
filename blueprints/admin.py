@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, redirect, abort,url_for
+from flask import Blueprint, render_template, request, session, redirect, abort, url_for
 import config
 
 from extensions import db
@@ -44,6 +44,7 @@ def products():
         description = request.form.get('description', None)
         price = request.form.get('price', None)
         active = request.form.get('active', None)
+        file = request.files.get('cover', None)
         p = Product(name=name.title(), description=description.title(), price=price, active=active)
         if active == None:
             p.active = 0
@@ -51,6 +52,7 @@ def products():
             p.active = 1
         db.session.add(p)
         db.session.commit()
+        file.save(f'static/cover/{p.id}.jpg')
         return "Product Added. Done"
 
 
@@ -65,6 +67,7 @@ def edit_product(id):
         description = request.form.get('description', None)
         price = request.form.get('price', None)
         active = request.form.get('active', None)
+        file = request.files.get('cover', None)
         # p = Product(name=name.title(), description=description.title(), price=price, active=active)
         product.name = name
         product.description = description
@@ -75,4 +78,7 @@ def edit_product(id):
         else:
             product.active = 1
         db.session.commit()
+        if file != None:
+            file.save(f'static/cover/{product.id}.jpg')
+
         return redirect(url_for("admin.edit_product", id=id))
