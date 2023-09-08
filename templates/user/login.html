@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>User Login</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Login/Register User</h1>
+    <form action="#" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="register" value="1">
+        <input type="text" name="username" placeholder="UserName"><br>
+        <input type="password" name="password" placeholder="Password"><br>
+
+        <input type="number" name="phone" placeholder="phone"><br>
+        <input type="text" name="address" placeholder="address"><br>
+
+        <input type="submit">
+    </form>
+
+
+{% endblock %}
+
+
+

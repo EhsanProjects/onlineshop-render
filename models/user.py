@@ -1,6 +1,7 @@
 from sqlalchemy import *
 from  extensions import db
-class User(db.Model):
+from flask_login import UserMixin
+class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False, index=True)
