@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for, flash
 from flask_wtf.csrf import CSRFProtect
 import config
 import extensions
@@ -28,6 +28,14 @@ login_manager.init_app(app)
 def load_user(user_id):
         # return User.get(user_id) or next line
         return User.query.filter(User.id == user_id).first()
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+        flash('Please login!')
+        return redirect(url_for('user.login'))
+
+
 
 with app.app_context():
     extensions.db.create_all()
