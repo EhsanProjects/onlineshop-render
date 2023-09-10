@@ -5,12 +5,13 @@
 {% endblock %}
 
 {% block body %}
-    {% set cart = current_user.carts|selectattr('status','equalto','pending')|list %}
 
-    {% if  cart|length >0 %}
-        {% for cart_item in (cart|first).cart_items %}
+    {% if cart != None and cart.cart_items|list|length > 0 %}
 
-            {{ cart_item.product.name }} , {{ cart_item.quantity }} * {{ cart_item.product.price }}
+        {% for cart_item in cart.cart_items %}
+
+            {{ cart_item.product.name }} , {{ cart_item.quantity }} * {{ cart_item.product.price }} ==>
+            ${{ cart_item.quantity * cart_item.product.price }}
 
             <form action="/remove-from-cart" method="get">
                 <input type="hidden" name="id" value="{{ cart_item.id }}">
@@ -18,6 +19,11 @@
             </form>
             <br>
         {% endfor %}
+
+
+        <br><b> Total price: ${{ cart.total_price() }} </b>
+    {% else %}
+        Cart is empty!
     {% endif %}
 {% endblock %}
 
