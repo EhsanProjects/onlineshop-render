@@ -1,4 +1,6 @@
 from sqlalchemy import *
+from sqlalchemy.orm import backref
+
 from  extensions import db
 
 
@@ -10,7 +12,7 @@ class CartItem(db.Model):
     quantity = Column(Integer)
 
     product = db.relationship("Product", backref='cart_items')
-    cart = db.relationship("Cart", backref='cart_items')
+    cart = db.relationship("Cart", backref=backref('cart_items', lazy='dynamic'))
 
 
     # name = Column(String, unique=True, nullable=False, index=True)

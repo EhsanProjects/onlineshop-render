@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <title> About {{ product.name}}</title>
+    <title> About {{ product.name }}</title>
 {% endblock %}
 
 {% block body %}
@@ -9,5 +9,10 @@
     {{ product.id }}<br>
     {{ product.name }}<br>
     {{ product.price }}
+
+    <form method="get" action="/add-to-cart">
+        <input type="hidden" name="id" value="{{ product.id }}">
+        <input type="submit" value="Add to cart">
+    </form>
 
 {% endblock %}
