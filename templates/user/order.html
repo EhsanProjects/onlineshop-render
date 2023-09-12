@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>Based on Order number : {{ cart.id }}</title>
+{% endblock %}
+
+{% block body %}
+    {{ cart.status }}<br>
+    {% for item in cart.cart_items %}
+        {#    {{ cart.cart_items[0].product.name }} , {{ cart.status }}#}
+        {{ 'Name : ' }}{{ item.product.name }}  {{ '   / Quantity : ' }}{{ item.quantity }}  {{ '   / Price : $' }}{{ item.price }} <br>
+    {% endfor %}
+{% endblock %}
+
+
+

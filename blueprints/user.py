@@ -1,3 +1,4 @@
+import stripe
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, login_required, current_user
 from passlib.hash import sha256_crypt
@@ -7,6 +8,7 @@ from models.cart_item import CartItem
 from models.product import Product
 from models.user import User
 import models.user
+import requests
 
 app = Blueprint("user", __name__)
 
@@ -71,14 +73,15 @@ def add_to_cart():
     db.session.commit()
     return redirect(url_for('user.cart'))
 
+
 # ----------------------------------------------------------------------------
 @app.route('/remove-from-cart', methods=['GET'])
 @login_required
 def remove_from_cart():
     id = request.args.get('id')
     cart_item = CartItem.query.filter(CartItem.id == id).first_or_404()
-    if cart_item.quantity>1:
-        cart_item.quantity -=1
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
     else:
         db.session.delete(cart_item)
     db.session.commit()
@@ -89,11 +92,26 @@ def remove_from_cart():
 @app.route('/cart', methods=['GET'])
 @login_required
 def cart():
-    cart = current_user.carts.filter(Cart.status =="pending").first()
-    return render_template('user/cart.html', cart=cart )
+    cart = current_user.carts.filter(Cart.status == "pending").first()
+    return render_template('user/cart.html', cart=cart)
 
 
+# ---------------------------------------------------------------------------------
+@app.route('/payment', methods=['GET', 'POST'])
+@login_required
+def payment():
+    pass
+
+
+# -------------------------------------------------------------------------
 @app.route('/user/dashboard', methods=['GET'])
 @login_required
 def dashboard():
-    return "Dashboard"
+    return render_template(('user/dashboard.html'))
+
+
+@app.route('/user/dashboard/order/<id>', methods=['GET'])
+@login_required
+def order(id):
+    cart = current_user.carts.filter(Cart.id == id).first_or_404()
+    return render_template('user/order.html', cart=cart)

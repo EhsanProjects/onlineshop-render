@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>User dashboard</title>
+{% endblock %}
+
+{% block body %}
+    {% for cart in current_user.carts|selectattr('status','==','pending') %}
+        {{ 'These payments are pending' }}<br><br>
+          {{ cart.status }}
+    {% endfor %}
+
+    <br><br>{{ '---------------------------------------------------------' }}<br><br>
+
+    {% for cart in current_user.carts|selectattr('status','!=','pending') %}
+        {{ 'These payments are not pending' }}<br><br>
+          <a href="{{ url_for('user.order',id=cart.id) }}"> {{ cart.id }} - {{ cart.status }} </a>
+    {% endfor %}
+{% endblock %}
+
+
+
