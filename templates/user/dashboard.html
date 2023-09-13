@@ -15,6 +15,7 @@
     {% for cart in current_user.carts|selectattr('status','!=','pending') %}
         {{ 'These payments are not pending' }}<br><br>
           <a href="{{ url_for('user.order',id=cart.id) }}"> {{ cart.id }} - {{ cart.status }} </a>
+{#          <a href="{{ url_for('user.order',id=cart.id) }}"> {{ cart.id }} - {{ cart.get_status_persian() }} </a>#}
     {% endfor %}
 {% endblock %}
 

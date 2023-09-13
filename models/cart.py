@@ -18,6 +18,19 @@ class Cart(db.Model):
             total += t
         return total
 
+    def get_status_persian(self):
+        if self.status == 'pending':
+            return "در انتظار پرداخت (سبد خرید)"
+
+        if self.status == "paid":
+            return "پرداخت شده"
+
+        if self.status == "sent":
+            return "ارسال شده"
+
+        if self.status == "rejected":
+            return "رد شده"
+
     # name = Column(String, unique=True, nullable=False, index=True)
     # description = Column(String, nullable=False, index=True)
     # price = Column(Integer, nullable=False, index=True)
