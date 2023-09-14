@@ -3,5 +3,6 @@ ___pycache__
 static/cover/
 static/fonts/
 static/image/
+static/theme-image/
 
 instance/

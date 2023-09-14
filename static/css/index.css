@@ -15,6 +15,10 @@
     --font-color: #575757;
 }
 
+* {
+    transition: all 300ms ease-in;
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -59,6 +63,14 @@ header div {
 
 }
 
+header  div  input{
+    font-size: 16px;
+    font-family: 'calendas_plusregular'; ;
+    font-weight: 300;
+    border-radius: 5px;
+    border: 2px solid rgba(0,0,0,0.3)
+}
+
 header a {
     font-size: 20px;
     color: var(--font-color);
@@ -76,16 +88,21 @@ header a:hover {
 }
 
 .products {
+
     display: flex;
+    max-width: 845px;
+    flex-wrap: wrap;
+    margin: auto;
+
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     margin-top: 20px;
 }
 
 .product-box {
     max-width: 230px;
     margin: 15px;
-    padding-bottom: 7px ;
+    padding-bottom: 7px;
     /*border-radius: 29px;*/
     /*background: #e0e0e0;*/
     /*box-shadow: 5px 5px 10px #bebebe,*/
@@ -111,19 +128,26 @@ header a:hover {
     padding: 5px;
     font-size: 14px;
     color: var(--font-color);
-    float: left;
+    float: right;
     margin-left: 10px;
     margin-bottom: 10px;
-    border: 2px solid rgb(16, 84, 45);
+    border: 3px solid rgb(16, 84, 45);
     border-radius: 9px;
     background: rgb(144, 196, 210);
 
 }
 
-.product-box > a.blue {
-    border: 2px solid rgb(7, 127, 186);
-    border-radius: 9px;
-    background: rgb(215, 139, 139);
+/*.product-box > a.blue {*/
+/*    border: 2px solid rgb(7, 127, 186);*/
+/*    border-radius: 9px;*/
+/*    background: rgb(215, 139, 139);*/
+
+/*}*/
+
+.product-box > a:hover {
+
+     background: rgb(200, 224, 231);
+
 }
 
 .product-box > p {
@@ -132,4 +156,40 @@ header a:hover {
     margin-bottom: 7px;
     margin-right: 10px;
     margin-top: 7px;
+}
+
+a {
+    dispaly: flex;
+    align-items: center;
+}
+
+a > img {
+    width: 15px;
+    margin-left: 5px;
+}
+
+.tag {
+
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 2px 5px;
+    font-weight: 200;
+
+}
+
+.tag img {
+    width: 15px;
+    margin-right: 5px;
+}
+
+.tag.one {
+    border: 1px solid #ff000061;
+    background: rgba(255, 0, 0, 0.05);
+}
+
+.tag.two {
+    border: 1px solid rgba(0, 94, 255, 0.38);
+    background: rgba(0, 136, 255, 0.05);
 }

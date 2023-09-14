@@ -1,0 +1,15 @@
+<header>
+    <section>
+        <img src="{{ url_for('static',filename='image/logo5.png') }}" alt="Online Shop">
+        <div>
+            <form action="#" method="GET">
+               <input type="search" name="search" value="{{ search if search!=None }}" placeholder="search...">
+            </form>
+
+            <a href="/"> Home</a>
+            {#                <a href="#"> New Products</a>#}
+            <a href="about"> About us</a>
+            {#                <a href="#"> Best Seller Products</a>#}
+        </div>
+    </section>
+</header>

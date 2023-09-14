@@ -1,0 +1,10 @@
+<section class="product-box">
+    <img src="{{ url_for('static', filename='cover/'+p.id|string+'.jpg') }}">
+    <span class="tag one"><img src="{{ url_for('static', filename='theme-image/delivery.png') }}">Free Shiping</span>
+    <span class="tag two"><img src="{{ url_for('static', filename='theme-image/original.png') }}">100% Original</span>
+    <h3>{{ p.name }}</h3>
+    <p>{{ p.description|truncate(50) }}<br>
+        <a class="blue" href="{{ url_for('general.product', id=p.id, name=p.name) }}">More information</a></p>
+    <a class="pink" href="add-to-cart?id={{ p.id }}">Add to cart<img
+            src="{{ url_for('static', filename='theme-image/cart.png') }}"></a>
+</section>

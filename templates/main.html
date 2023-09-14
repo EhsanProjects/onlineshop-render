@@ -6,30 +6,11 @@
 
 {% block body %}
 
-
-
-    <header>
-
-        <section>
-            <img src="{{ url_for('static',filename='image/logo5.png') }}" alt="Online Shop">
-            <div>
-                <a href="#"> Home</a>
-                <a href="#"> New Products</a>
-                <a href="#"> About us</a>
-                <a href="#"> Best Seller Products</a>
-            </div>
-        </section>
-    </header>
+    {% include 'part/header.html' %}
 
     <section class="products">
-    {% for p in products %}
-        <section class="product-box">
-            <img src="{{ url_for('static', filename='cover/'+p.id|string+'.jpg') }}">
-            <h3>{{ p.name }}</h3>
-            <p>{{ p.description|truncate(50) }}<br>
-            <a class="blue" href="{{ url_for('general.product', id=p.id, name=p.name) }}">More information</a></p>
-            <a class="pink" href="add-to-cart?id={{ p.id }}">Add to cart</a>
-        </section>
-    {% endfor %}
-</section>
+        {% for p in products %}
+            {% include 'part/product.html' %}
+        {% endfor %}
+    </section>
 {% endblock %}
