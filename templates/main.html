@@ -1,13 +1,35 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <title>Ehsan Online Shopping</title>
+    <title><Your Name> Online Shop</title>
 {% endblock %}
 
 {% block body %}
-{% for p in products %}
-    <a href="{{ url_for('general.product', id=p.id, name=p.name) }}">{{ p.name }}</a>
 
+
+
+    <header>
+
+        <section>
+            <img src="{{ url_for('static',filename='image/logo5.png') }}" alt="Online Shop">
+            <div>
+                <a href="#"> Home</a>
+                <a href="#"> New Products</a>
+                <a href="#"> About us</a>
+                <a href="#"> Best Seller Products</a>
+            </div>
+        </section>
+    </header>
+
+    <section class="products">
+    {% for p in products %}
+        <section class="product-box">
+            <img src="{{ url_for('static', filename='cover/'+p.id|string+'.jpg') }}">
+            <h3>{{ p.name }}</h3>
+            <p>{{ p.description|truncate(50) }}<br>
+            <a class="blue" href="{{ url_for('general.product', id=p.id, name=p.name) }}">More information</a></p>
+            <a class="pink" href="add-to-cart?id={{ p.id }}">Add to cart</a>
+        </section>
     {% endfor %}
-
+</section>
 {% endblock %}

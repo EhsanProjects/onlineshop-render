@@ -1,4 +1,7 @@
 .idea/
 ___pycache__
 static/cover/
+static/fonts/
+static/image/
+
 instance/
