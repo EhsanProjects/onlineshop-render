@@ -10,6 +10,13 @@
     font-style: normal;
 
 }
+@font-face{
+    font-family: 'Times';
+    src: url('../fonts/times.ttf');
+    src: url('../fonts/timesbd.ttf');
+    src: url('../fonts/timesbi.ttf');
+    src: url('../fonts/timesi.ttf');
+}
 
 :root {
     --font-color: #575757;
@@ -103,6 +110,10 @@ header a:hover {
     max-width: 230px;
     margin: 15px;
     padding-bottom: 7px;
+
+    /*column height will be set to 100% so the same height for all products in the home page*/
+    height: 100%;
+
     /*border-radius: 29px;*/
     /*background: #e0e0e0;*/
     /*box-shadow: 5px 5px 10px #bebebe,*/
@@ -182,6 +193,16 @@ a > img {
 .tag img {
     width: 15px;
     margin-right: 5px;
+}
+
+.price {
+    font-family: 'Times';
+    font-weight: bold;
+
+
+    bottom: 100px;
+
+
 }
 
 .tag.one {

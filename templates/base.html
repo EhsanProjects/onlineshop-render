@@ -13,6 +13,14 @@
 {% block body %}
 {% endblock %}
 
+<script>
+    const price2 =document.getElementsByClassName('price')
+
+    for(let i=0; i<price2.length;i++){
+        let price = price2[i]
+        price.innerText = " $" + parseInt(price.innerText).toLocaleString()
+    }
+</script>
 </body>
 </html>
 
