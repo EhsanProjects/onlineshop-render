@@ -1,8 +1,9 @@
 <header>
     <section>
         <img src="{{ url_for('static',filename='image/logo5.png') }}" alt="Online Shop">
-        <div>
-            <form action="#" method="GET">
+        <div id="header-menu">
+            <span id="header-menu-close-btn" onclick="change_header_menu(false)">close X</span>
+            <form action="/" method="GET">
                <input type="search" name="search" value="{{ search if search!=None }}" placeholder="search...">
             </form>
 
@@ -11,5 +12,6 @@
             <a href="about"> About us</a>
             {#                <a href="#"> Best Seller Products</a>#}
         </div>
+        <img src="{{ url_for('static',filename='theme-image/menu1.svg') }}" id="header-menu-btn" onclick="javascript:change_header_menu(true)">
     </section>
 </header>

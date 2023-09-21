@@ -10,7 +10,8 @@
     font-style: normal;
 
 }
-@font-face{
+
+@font-face {
     font-family: 'Times';
     src: url('../fonts/times.ttf');
     src: url('../fonts/timesbd.ttf');
@@ -20,6 +21,7 @@
 
 :root {
     --font-color: #575757;
+    --color-accent: rgb(63, 170, 246)
 }
 
 * {
@@ -30,7 +32,7 @@ body {
     padding: 0;
     margin: 0;
     font-size: 16px;
-    background: #e0e0e0;
+    background: #f1efef;
     color: var(--font-color);
     font-family: 'calendas_plusregular';
 }
@@ -42,17 +44,18 @@ header {
 
 header img {
 
-    height: inherit;
+    max-height: 40px;
     float: right;
 }
 
 header > section {
     max-width: 800px;
     width: 100%;
-    height: 40px;
+    height: 60px;
     padding: 10px 20px;
     margin: 30px auto auto;
-
+    /*for header fixing*/
+    box-sizing: border-box;
     /*Neomorphism.io*/
     /*border-radius: 72px;*/
     /*background: #e0e0e0;*/
@@ -60,6 +63,8 @@ header > section {
     /*-9px -9px 18px #ffffff;*/
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 20px;
+    background: #ffffff;
+
 }
 
 header div {
@@ -70,12 +75,12 @@ header div {
 
 }
 
-header  div  input{
+header div input {
     font-size: 16px;
-    font-family: 'calendas_plusregular'; ;
+    font-family: 'calendas_plusregular';;
     font-weight: 300;
     border-radius: 5px;
-    border: 2px solid rgba(0,0,0,0.3)
+    border: 2px solid rgba(0, 0, 0, 0.3)
 }
 
 header a {
@@ -157,7 +162,7 @@ header a:hover {
 
 .product-box > a:hover {
 
-     background: rgb(200, 224, 231);
+    background: rgb(200, 224, 231);
 
 }
 
@@ -191,18 +196,42 @@ a > img {
 }
 
 .tag img {
-    width: 15px;
+    width: 18px;
     margin-right: 5px;
 }
 
 .price {
-    font-family: 'Times';
+    font-family: 'Times New Roman';
     font-weight: bold;
 
 
     bottom: 100px;
 
 
+}
+
+.add-to-cart-btn2 {
+    text-decoration: none;
+    padding: 5px;
+    color: #f1efef;
+    font-size: 16px;
+    border-bottom-right-radius: 9px;
+    border-bottom-left-radius: 9px;
+    background: var(--color-accent);
+    font-weight: 400;
+    display: flex !important;
+    justify-content: center;
+}
+
+.add-to-cart-btn2:hover {
+    background: rgb(6, 76, 131);
+}
+
+.tag.big {
+    font-weight: 500;
+    font-size: 18px;
+    display: inline-block;
+    /*margin: 5px;*/
 }
 
 .tag.one {
@@ -213,4 +242,120 @@ a > img {
 .tag.two {
     border: 1px solid rgba(0, 94, 255, 0.38);
     background: rgba(0, 136, 255, 0.05);
+}
+
+.tag.three {
+    border: 1px solid rgba(74, 236, 10, 0.38);
+    background: rgba(16, 84, 45, 0.18);
+    margin-top: 5px;
+}
+
+.tag.three img {
+    border: 1px solid rgba(74, 236, 10, 0.38);
+    background: rgba(16, 84, 45, 0.18);
+    margin-top: 5px;
+    width: 150px;
+}
+
+.product-detail-box {
+
+    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: start;
+    margin: 50px auto auto;
+}
+
+.product-detail-box img {
+    max-width: 300px;
+}
+
+.product-detail-box > section {
+    max-width: 500px;
+}
+
+.product-detail-box h1 {
+    margin: 5px;
+}
+
+.product-detail-box h6 {
+    font-family: "Times New Roman";
+    font-size: 13px;
+    margin: 5px;
+}
+
+.product-detail-box .price {
+    display: block;
+    background: #888787;
+    font-size: 20px;
+    font-weight: 500;
+    color: #f1efef;
+    border-top-right-radius: 9px;
+    border-top-left-radius: 9px;
+}
+
+.product-detail-box .price-box {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.product-description-box {
+    max-width: 1000px;
+    margin: auto;
+    font-family: "Times New Roman";
+}
+
+.product-detail-box p {
+    text-align: justify;
+
+}
+
+.similar-products-box {
+    max-width: 1000px;
+    margin: auto;
+
+}
+
+#header-menu-btn {
+    float: left;
+    display: none;
+    /*visibility: hidden;*/
+}
+
+#header-menu-close-btn {
+   text-align: right !important;
+    width: 95%;
+    margin: 10px;
+    font-size: 20px;
+    display: none;
+
+}
+
+@media (max-width: 600px) {
+    /*#header-menu-btn{visibility: visible}*/
+    header > section > div {
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        background: #ffffff;
+
+        height: 0;
+        overflow: hidden;
+        z-index: 99;
+    }
+
+    header > section > div > * {
+        display: block;
+    margin-top: 5px;
+    }
+#header-menu-btn {
+    display: block;
+}
+#header-menu-close-btn {
+     display:block;
+}
+
 }
