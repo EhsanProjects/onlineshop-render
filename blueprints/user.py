@@ -70,8 +70,11 @@ def add_to_cart():
     else:
         cart_item.quantity += 1
 
+
     db.session.commit()
+
     return redirect(url_for('user.cart'))
+
 
 
 # ----------------------------------------------------------------------------

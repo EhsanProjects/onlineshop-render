@@ -7,26 +7,17 @@
 {% block body %}
     {% include'part/header.html' %}
 
-    {##}
-    {#{% set x = 0 %}#}
-    {#{% for cart_item in cart.cart_items %}#}
-    {#    {% set x = x + cart_item.quantity %}#}
-    {#{% endfor %}#}
-    {#<h1>Cart ({{ x }} items)</h1>#}
-
-
     <section class="simple-box">
-<h1>Your Cart: </h1>
+
 
         {% if cart != None and cart.cart_items|list|length > 0 %}
             <table class="cart">
 
                 <tr>
-                    <th class="title">Name</th>
-                    <th class="title">Price</th>
-                    <th class="title">Quantity</th>
-                    <th class="title">Subtotal</th>
-
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
                 </tr>
 
 
@@ -34,11 +25,9 @@
                     <tr>
                         <td>{{ cart_item.product.name }}</td>
                         <td class="price">{{ cart_item.product.price }}</td>
-                        <td class="small-ellipse quantity-column">
-                            <a class="cartitem-decrease-increase" href="/remove-from-cart?id={{ cart_item.id }}">-</a>
+                        <td><a href="/remove-from-cart?id={{ cart_item.id }}">-</a>
                             {{ cart_item.quantity }}
-                            <a class="cartitem-decrease-increase"
-                               href="/add-to-cart?id={{ cart_item.product.id }}">+</a>
+                            <a href="/add-to-cart?id={{ cart_item.product.id }}">+</a>
                         </td>
                         <td class="price">{{ cart_item.quantity * cart_item.product.price }}</td>
                     </tr>
@@ -48,7 +37,7 @@
 
             </table>
             <div class="price-box-box">
-                {#                Total price:#}
+{#                Total price:#}
                 <span class="price">{{ cart.total_price() }}</span>
                 <a class="add-to-cart-btn2" href="/payment">Checkout</a>
 
