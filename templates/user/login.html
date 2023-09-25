@@ -1,35 +1,57 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <title>User Login</title>
+    <title>User Login/Register</title>
 {% endblock %}
 
 {% block body %}
-    <h1>Register User</h1>
-    <form action="#" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input type="hidden" name="register" value="1">
-        <input type="text" name="username" placeholder="UserName"><br>
-        <input type="password" name="password" placeholder="Password"><br>
+    {% include 'part/header.html' %}
 
-        <input type="number" name="phone" placeholder="phone"><br>
-        <input type="text" name="address" placeholder="address"><br>
+    <section class="simple-box" style="max-width: 450px;">
+        <h1> User Login/Register</h1>
+        <div id="login-box">
+            <form action="#" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="text" name="username" placeholder="UserName">
+                <input type="password" name="password" placeholder="Password">
+                <input type="submit" value="Login">
+            </form>
+            <span style="cursor: pointer" onclick="javascript:show_register()">Click to Register!</span>
+        </div>
 
-        <input type="submit">
-    </form>
+        <div id="register-box">
+            <form action="#" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="register" value="1">
+                <input type="text" name="username" placeholder="UserName">
+                <input type="password" name="password" placeholder="Password">
+                <input type="number" name="phone" placeholder="Phone">
+                <textarea type="text" name="address" placeholder="Address"></textarea>
+                <input type="submit" value="Register">
+            </form>
+            <span style="cursor: pointer" onclick="javascript:show_login()">Click to Login!</span>
+        </div>
 
-    <h1>Login User</h1>
-    <form action="#" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input type="text" name="username" placeholder="UserName"><br>
-        <input type="password" name="password" placeholder="Password"><br>
-        <input type="submit">
-    </form>
+
+    </section>
 
 
-    {%for m in get_flashed_messages() %}
+    {% for m in get_flashed_messages() %}
         {{ m }}
     {% endfor %}
+    <script>
+        const register_box = document.getElementById(('register-box'))
+        const login_box = document.getElementById(('login-box'))
+        const show_register = () => {
+            register_box.style.display = "block"
+            login_box.style.display = "none"
+        }
+        const show_login = () => {
+            register_box.style.display = "none"
+            login_box.style.display = "block"
+        }
+
+    </script>
 {% endblock %}
 
 
