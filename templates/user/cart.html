@@ -50,7 +50,8 @@
             <div class="price-box-box">
                 {#                Total price:#}
                 <span class="price">{{ cart.total_price() }}</span>
-                <a class="add-to-cart-btn2" href="/payment">Checkout</a>
+                <a class="add-to-cart-btn2 icon" href="/payment">Checkout<img
+                        src="{{ url_for('static', filename='theme-image/payment.png') }}"></a>
 
             </div>
 

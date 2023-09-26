@@ -203,11 +203,18 @@ a > img {
 .price {
     font-family: 'Times New Roman';
     font-weight: bold;
-
-
     bottom: 100px;
+}
 
 
+a.icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+a.icon > img {
+    width: 30px;
+    margin-right: 5px;
 }
 
 .add-to-cart-btn2 {
@@ -428,7 +435,15 @@ table.cart{
 #login-box, #register-box {
     text-align: center;
 }
+.eggy .title {
+    font-weight: 800 !important;
+    font-size: 19px !important;
+}
 
+.eggy .message {
+    font-weight: 400 !important;
+    font-size: 16px !important;
+}
 /*--------------------------------------------------------------------------------*/
 @media (max-width: 730px) {
     /*#header-menu-btn{visibility: visible}*/
