@@ -206,7 +206,10 @@ a > img {
     bottom: 100px;
 }
 
-
+p{
+    text-align: justify;
+    padding: 5px 10px;
+}
 a.icon {
     display: inline-flex;
     align-items: center;

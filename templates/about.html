@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <title>About <your website name> Online Shopping</title>
+    <title>About {{ myconfig.SITE_NAME }} </title>
 {% endblock %}
 
 {% block body %}
-   About us
 
+ {% include 'part/header.html' %}
+    <section class="simple-box">
+        <h1>About {{ myconfig.SITE_NAME }}</h1>
+        {{ myconfig.ABOUT_PAGE_HTML|safe }}
+
+    </section>
 {% endblock %}
