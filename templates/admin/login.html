@@ -5,13 +5,16 @@
 {% endblock %}
 
 {% block body %}
+
+    <section class="simple-box" style="max-width: 650px">
     <h1>Admin Login</h1>
     <form action="#" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input type="text" name="username" placeholder="UserName"><br>
-        <input type="password" name="password" placeholder="Password"><br>
-        <input type="submit">
+        <input type="text" name="username" placeholder="UserName">
+        <input type="password" name="password" placeholder="Password">
+        <input type="submit" value="Enter">
     </form>
+    </section>
 {% endblock %}
 
 

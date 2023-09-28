@@ -5,8 +5,9 @@
 {% endblock %}
 {% block body %}
     {% include'part/header.html' %}
-    <section class="simple-box">
+    <section class="simple-box cart" style="max-width: 650px ">
         <h1>Your Orders: </h1>
+    {% if current_user.carts|list|length > 0 %}
         <table class="cart">
             <tr>
                 <th class="title">Order Number</th>
@@ -30,7 +31,28 @@
                 </tr>
             {% endfor %}
         </table>
+    {% else %}
+    <i style="display: block;text-align: center;">There is no Order!</i>
+    {% endif %}
     </section>
+
+
+    <section class="simple-box cart" style="max-width: 650px ">
+        <h1>Edit Profile</h1>
+        <form action="#" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+            <input type="text" name="username" value="{{ current_user.username }}" placeholder="UserName" readonly>
+            {#            <input type="password" name="password" placeholder="Password">#}
+            <input type="number" name="phone" value="{{ current_user.phone }}" placeholder="Phone">
+            <textarea type="text" name="address" placeholder="Address">{{ current_user.address }}</textarea>
+            <input type="submit" value="Save">
+        </form>
+    </section>
+    <div style="text-align: center;margin-top: 20px;">
+        <a href="/user/logout" class="red-btn">Logout</a>
+    </div>
+
 {% endblock %}
 
 

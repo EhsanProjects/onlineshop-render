@@ -5,16 +5,50 @@
 {% endblock %}
 
 {% block body %}
-    <a href="/admin/dashboard/products" title="Products Page">Products Page</a>
-    <div>
-        {% for cart in carts %}
 
-            {{ cart.user.username }} {{ ' --> ' }}{{ cart.user.phone }}{{ ' -->          ' }}{{ cart.status }}
-{#            {{ cart.user.username }} {{ ' --> ' }}{{ cart.user.phone }}{{ ' -->          ' }}{{ cart.get_status_persian() }}#}
-            <a href="  {{ url_for('admin.order',id=cart.id) }}  "> More information</a>
-            <br>
-        {% endfor %}
-    </div>
+    {% include 'part/header.html' %}
+
+
+    <section class="simple-box cart" style="max-width: 700px ">
+        <h1>Your Orders: </h1>
+        {% if carts|list|length > 0 %}
+            <table class="cart">
+                <tr>
+                    <th class="title">Order Number</th>
+                    <th class="title">UserName</th>
+                    <th class="title">Phone</th>
+                    <th class="title">Status</th>
+                    <th class="title">Show Order</th>
+                </tr>
+
+                {% for cart in carts|selectattr('status','==','pending') %}
+                    <tr>
+                        <td>{{ cart.id }}</td>
+                        <td>{{ cart.user.username }}</td>
+                        <td>{{ cart.user.phone }}</td>
+                        <td>{{ cart.status }}</td>
+                        <td><a href="{{ url_for('admin.order',id=cart.id) }}"> Details </a></td>
+                    </tr>
+                {% endfor %}
+
+                {% for cart in carts|selectattr('status','!=','pending') %}
+                    <tr>
+                        <td>{{ cart.id }}</td>
+                        <td>{{ cart.user.username }}</td>
+                        <td>{{ cart.user.phone }}</td>
+                        <td>{{ cart.status }}</td>
+                        <td><a href="{{ url_for('admin.order',id=cart.id) }}"> Details </a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <i style="display: block;text-align: center;">There is no Order!</i>
+        {% endif %}
+    </section>
+
+
+
+
 {% endblock %}
 
 

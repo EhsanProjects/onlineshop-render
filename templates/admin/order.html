@@ -5,23 +5,60 @@
 {% endblock %}
 
 {% block body %}
-    <form action="#" method="post">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <select name="status">
-            <option value="pending" {% if cart.status == "pending" %} selected {% endif %}>pending</option>
-            <option value="paid" {% if cart.status == "paid" %} selected {% endif %}>paid</option>
-            <option value="sent" {% if cart.status == "sent" %} selected {% endif %}>sent</option>
-            <option value="rejected" {% if cart.status == "rejected" %} selected {% endif %}>rejected</option>
-        </select>
-        <input type="submit" value="Change">
-    </form>
-    <div>
-        {% for item in cart.cart_items %}
-            {{ item.product.name }}{{ ' -->  ' }} {{ item.product.quantity }}{{ ' * ' }} {{ item.product.price }}
 
-            <br>
-        {% endfor %}
-    </div>
+    {% include 'part/header.html' %}
+    <section class="simple-box">
+        <h1 style="font-family: 'Times New Roman'">Order Number : {{ cart.id }} </h1>
+        <form action="#" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <select name="status">
+                <option value="pending" {% if cart.status == "pending" %} selected {% endif %}>pending</option>
+                <option value="paid" {% if cart.status == "paid" %} selected {% endif %}>paid</option>
+                <option value="sent" {% if cart.status == "sent" %} selected {% endif %}>sent</option>
+                <option value="rejected" {% if cart.status == "rejected" %} selected {% endif %}>rejected</option>
+            </select>
+            <input type="submit" value="Change">
+        </form>
+        <table class="cart" style="margin-top: 30px">
+            <tr>
+                <th class="title">Product ID</th>
+                <th class="title">Product Name</th>
+                <th class="title">Price</th>
+                <th class="title">Quantity</th>
+                <th class="title">Subtotal</th>
+            </tr>
+            {% for item in cart.cart_items %}
+                <tr>
+                    <td>{{ item.product.id }}</td>
+                    <td>{{ item.product.name }}</td>
+                    <td class="price">{{ item.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td class="price">{{ item.quantity * item.price }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" style="text-align: right">Total price</td>
+                <td colspan="2" style="text-align: right" class="price">{{ cart.total_price() }}</td>
+            </tr>
+        </table>
+
+        <table class="cart" style="margin-top: 30px">
+            <tr>
+                <td>Status</td>
+                <td>Price</td>
+                <td>Refrence ID</td>
+            </tr>
+            {% for pay in cart.payments %}
+                <tr>
+                    <td>{{ pay.status }}</td>
+                    <td class="price">{{ pay.price }}</td>
+                    <td>{{ pay.refid }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+
+    </section>
 
 {% endblock %}
 

@@ -1,6 +1,6 @@
 import stripe
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user, login_required, current_user
+from flask_login import login_user, login_required, current_user,logout_user
 from passlib.hash import sha256_crypt
 from extensions import db
 from models.cart import Cart
@@ -16,6 +16,9 @@ app = Blueprint("user", __name__)
 @app.route('/user/login', methods=['GET', 'POST'])
 def login():  # put application's code here
     if request.method == 'GET':
+        if current_user.is_authenticated:
+            return redirect (url_for('user.dashboard'))
+
         return render_template('user/login.html')
     else:
         register = request.form.get('register', None)
@@ -45,7 +48,7 @@ def login():  # put application's code here
         else:
             flash('Wrong password or username. Try again or click Forgot password to reset it.')
             return redirect(url_for('user.login'))
-    return "Done1"
+
 
 
 @app.route('/add-to-cart', methods=['GET'])
@@ -107,11 +110,33 @@ def payment():
 
 
 # -------------------------------------------------------------------------
-@app.route('/user/dashboard', methods=['GET'])
+@app.route('/user/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template(('user/dashboard.html'))
+    if request.method=='GET':
+        return render_template(('user/dashboard.html'))
+    else:
+        username = request.form.get('username', None)
+        password = request.form.get('password', None)
+        phone = request.form.get('phone', None)
+        address = request.form.get('address', None)
+        user = User.query.filter(User.username == username).first()
 
+        current_user.address = address
+        current_user.phone = phone
+
+
+        db.session.commit()
+        flash('Profile is updated')
+        return redirect(url_for('user.dashboard'))
+
+
+@app.route('/user/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    flash('Logout was successful')
+    return redirect('/')
 
 @app.route('/user/dashboard/order/<id>', methods=['GET'])
 @login_required

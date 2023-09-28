@@ -6,10 +6,10 @@
 
 {% block body %}
 
-    <section class="simple-box">
-        <h1 style="font-family: 'Times New Roman'">Order Number : {{ cart.id }}  -   {{ cart.status }}</h1>
 
-        <table class="cart">
+    <section class="simple-box">
+        <h1 style="font-family: 'Times New Roman'">Order Number : {{ cart.id }} - {{ cart.status }}</h1>
+        <table class="cart" style="margin-top: 30px">
             <tr>
                 <th class="title">Product ID</th>
                 <th class="title">Product Name</th>
@@ -23,25 +23,35 @@
                     <td>{{ item.product.name }}</td>
                     <td class="price">{{ item.price }}</td>
                     <td>{{ item.quantity }}</td>
-                <td class="price">{{ item.quantity * item.price }}</td>
+                    <td class="price">{{ item.quantity * item.price }}</td>
 
                 </tr>
 
-
             {% endfor %}
-
-<tr>
-    <td colspan="3" style="text-align: right" >Total price</td>
-    <td colspan="2" style="text-align: right" class="price">{{ cart.total_price() }}</td>
-
-
-</tr>
+            <tr>
+                <td colspan="3" style="text-align: right">Total price</td>
+                <td colspan="2" style="text-align: right" class="price">{{ cart.total_price() }}</td>
+            </tr>
         </table>
+
+
+    <table class="cart" style="margin-top: 30px">
+            <tr>
+                <td>Status</td>
+                <td>Price</td>
+                <td>Refrence ID</td>
+            </tr>
+            {% for pay in cart.payments %}
+                <tr>
+                    <td>{{ pay.status }}</td>
+                    <td class="price">{{ pay.price }}</td>
+                    <td>{{ pay.refid }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+
     </section>
-
-
-
-
 
 {% endblock %}
 

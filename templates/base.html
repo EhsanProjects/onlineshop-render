@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/eggy.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/progressbar.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/theme.css') }}">
+{#    <link rel="stylesheet" href="{{ url_for('static',filename='css/theme.css') }}">#}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/index.css') }}">
     {% block header %}
     {% endblock %}
@@ -40,7 +40,7 @@
         await Eggy({
             title: 'Notice',
             message: '{{ m }}',
-            type: 'error',
+            type: 'info',
             duration: 10000,
         });
     {% endfor %}

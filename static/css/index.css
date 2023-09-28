@@ -41,6 +41,14 @@ header {
     width: 100%;
     text-align: center;
 }
+header .header-link {
+    font-size: 20px;
+    color: var(--font-color);
+    text-decoration: none;
+    font-weight: 900;
+    margin: 0 10px;
+    padding: 5px;
+}
 
 header img {
 
@@ -64,6 +72,7 @@ header > section {
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     background: #ffffff;
+    box-shadow: 1px 1px 10px 1px #00000020;
 
 }
 
@@ -110,6 +119,11 @@ header a:hover {
     align-items: stretch;
     margin-top: 20px;
 }
+
+.product-box section:hover{
+    box-shadow: 1px 1px 10px 1px #00000020;
+}
+
 
 .product-box {
     max-width: 230px;
@@ -159,6 +173,21 @@ header a:hover {
 /*    background: rgb(215, 139, 139);*/
 
 /*}*/
+.red-btn {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 15px;
+    border: 2px solid #ff0000;
+    color: #ff0000;
+    padding: 6px;
+    margin: 5px;
+}
+
+.red-btn:hover {
+    background: #ff0000;
+    color: #ffffff;
+}
 
 .product-box > a:hover {
 
@@ -208,7 +237,7 @@ a > img {
 td.price{
     font-weight: normal;
 }
-p{
+.simple-box p{
     text-align: justify;
     padding: 5px 10px;
 }
@@ -405,7 +434,7 @@ table.cart{
 #register-box{
     display: none;
 }
-.simple-box input, .simple-box textarea{
+.simple-box input, .simple-box textarea, .simple-box select{
     color: var(--font-color);
     font-size: 16px;
     max-width: 180px;
