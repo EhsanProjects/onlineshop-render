@@ -205,7 +205,9 @@ a > img {
     font-weight: bold;
     bottom: 100px;
 }
-
+td.price{
+    font-weight: normal;
+}
 p{
     text-align: justify;
     padding: 5px 10px;

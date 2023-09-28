@@ -3,20 +3,34 @@
 {% block header %}
     <title>User dashboard</title>
 {% endblock %}
-
 {% block body %}
-    {% for cart in current_user.carts|selectattr('status','==','pending') %}
-        {{ 'These payments are pending' }}<br><br>
-          {{ cart.status }}
-    {% endfor %}
+    {% include'part/header.html' %}
+    <section class="simple-box">
+        <h1>Your Orders: </h1>
+        <table class="cart">
+            <tr>
+                <th class="title">Order Number</th>
+                <th class="title">Status</th>
+                <th class="title">Show Order</th>
+            </tr>
 
-    <br><br>{{ '---------------------------------------------------------' }}<br><br>
+            {% for cart in current_user.carts|selectattr('status','==','pending') %}
+                <tr>
+                    <td>{{ cart.id }}</td>
+                    <td>{{ cart.status }}</td>
+                    <td><a href="{{ url_for('user.order',id=cart.id) }}"> Details </a></td>
+                </tr>
+            {% endfor %}
 
-    {% for cart in current_user.carts|selectattr('status','!=','pending') %}
-        {{ 'These payments are not pending' }}<br><br>
-          <a href="{{ url_for('user.order',id=cart.id) }}"> {{ cart.id }} - {{ cart.status }} </a>
-{#          <a href="{{ url_for('user.order',id=cart.id) }}"> {{ cart.id }} - {{ cart.get_status_persian() }} </a>#}
-    {% endfor %}
+            {% for cart in current_user.carts|selectattr('status','!=','pending') %}
+                <tr>
+                    <td>{{ cart.id }}</td>
+                    <td>{{ cart.status }}</td>
+                    <td><a href="{{ url_for('user.order',id=cart.id) }}"> Details </a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
 {% endblock %}
 
 
