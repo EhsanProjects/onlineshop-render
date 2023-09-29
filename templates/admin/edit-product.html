@@ -1,22 +1,27 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <title>Edit Product</title>
+    <title>Edit Product | Product Number:  {{ product.id }}</title>
 {% endblock %}
 
 {% block body %}
-    <h1>Edit Product</h1>
+    {% include 'part/header.html' %}
+    <section class="simple-box big">
+    <h1>Edit Product | Product Number:  {{ product.id }}</h1>
 
-    <td><img style="width: 60px" src="/static/cover/{{ product.id }}.jpg"></td>
+    <td><img style="width: 120px;margin: auto;display: block" src="{{  url_for('static',filename='cover/'+product.id|string+".jpg")}}"></td>
     <form action="#" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <label>Cover: </label><input type="file" name="cover"><br>
-        <input type="text" name="name" value="{{ product.name }}" placeholder="Product Name"><br>
-        <textarea name="description"  placeholder="Description">{{ product.description }}</textarea><br>
-        <input type="number" name="price" value="{{ product.price }}" placeholder="Product Price"><br>
-        <label>Active: </label><input type="checkbox" value="1" name="active" {{ "checked" if product.active == 1  }}><br>
-        <input type="submit">
+        <input type="file" name="cover">
+        <input type="text" name="name" value="{{ product.name }}" placeholder="Product Name">
+        <textarea name="description"  placeholder="Description">{{ product.description }}</textarea>
+        <input type="number" name="price" value="{{ product.price }}" placeholder="Product Price">
+        <div style="display: flex;justify-content: center">
+        <label>Active </label><input style="margin: 5px; width:auto" type="checkbox" value="1" name="active" {{ "checked" if product.active == 1  }}><br>
+   </div>
+        <input type="submit" value="Save">
     </form>
+    </section>
 {% endblock %}
 
 
