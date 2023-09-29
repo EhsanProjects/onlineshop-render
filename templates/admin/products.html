@@ -5,39 +5,51 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Admin Products</h1>
-    <table >
-        <tr>
-            <th>Photo</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Active</th>
-            <th>Edit</th>
-        </tr>
-
-        {% for p in products %}
+    {% include "part/header.html" %}
+    <section class="simple-box">
+        <h1>Products</h1>
+        <table>
             <tr>
-            <td><img style="width: 40px" src="/static/cover/{{ p.id }}.jpg"></td>
-            <td>{{ p.name }}</td>
-            <td>{{ p.description }}</td>
-            <td>{{ p.price }}</td>
-            <td>{{ "Yes" if p.active == 1 else "No" }}</td>
-            <td><a href="/admin/dashboard/edit-product/{{ p.id }}">Edit</a> </td>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Active</th>
+                <th>Edit</th>
             </tr>
-        {% endfor %}
 
+            {% for p in products %}
+                <tr>
+                    <td><img style="width: 70px" src="/static/cover/{{ p.id }}.jpg"></td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.description|truncate(150) }}</td>
+                    <td>{{ p.price }}</td>
+                    {#                    <td> {{ "Yes" if p.active == 1 else "No" }}</td>#}
+                    <td><img style="justify-content: center; width: 20px"
+                             src="{{ url_for('static', filename='theme-image/done.png') if p.active==1 else url_for('static', filename='theme-image/close.png') }}">
+                    </td>
+                    <td><a href="/admin/dashboard/edit-product/{{ p.id }}">Edit</a></td>
+                </tr>
+            {% endfor %}
 
-    </table>
-    <form action="#" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <label>Cover: </label><input type="file" name="cover"><br>
-        <input type="text" name="name" placeholder="Product Name"><br>
-        <textarea name="description" placeholder="Description"></textarea><br>
-        <input type="number" name="price" placeholder="Product Price"><br>
-        <label>Active: </label><input type="checkbox" value="1" name="active"><br>
-        <input type="submit">
-    </form>
+        </table>
+    </section>
+    <section class="simple-box">
+        <h2>New product</h2>
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="file" name="cover">
+            <input type="text" name="name" placeholder="Product Name">
+            <textarea name="description" placeholder="Description"></textarea>
+            <input type="number" name="price" placeholder="Price">
+            <div style="display: flex;justify-content: center">
+                <label for="active">Active </label><input style="margin: 5px" type="checkbox" id="active" value="1"
+                                                          name="active">
+            </div>
+            <input type="submit" value="Add new product">
+        </form>
+    </section>
+
 {% endblock %}
 
 
