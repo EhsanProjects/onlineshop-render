@@ -14,7 +14,8 @@ def main():  # put application's code here
     products = Product.query.filter(Product.active == 1)
     if search != None:
         products = products.filter(Product.name.like(f'%{search}%'))
-    products = products.all()
+    # products = products.order_by(Product.price.desc()).all()  ///////order by price
+    products = products.order_by(func.random()).all()
 
     # products = Product.query.filter(Product.active == 1).all()
 
@@ -29,7 +30,7 @@ def product(id, name):
 
     another_products = Product.query.filter(Product.active == 1).filter(
         Product.name.like(f'%{product.name[0:3]}%')).order_by(func.random()).limit(3).all()
-    return render_template('product.html', product=product,another_products=another_products)
+    return render_template('product.html', product=product, another_products=another_products)
 
 
 @app.route('/about')

@@ -17,7 +17,7 @@
         <textarea name="description"  placeholder="Description">{{ product.description }}</textarea>
         <input type="number" name="price" value="{{ product.price }}" placeholder="Product Price">
         <div style="display: flex;justify-content: center">
-        <label>Active </label><input style="margin: 5px; width:auto" type="checkbox" value="1" name="active" {{ "checked" if product.active == 1  }}><br>
+        <label for="active">Active </label><input style="margin: 5px; width:auto" id="active" type="checkbox" value="1" name="active" {{ "checked" if product.active == 1  }}><br>
    </div>
         <input type="submit" value="Save">
     </form>

@@ -34,7 +34,7 @@
 
         </table>
     </section>
-    <section class="simple-box">
+    <section class="simple-box big">
         <h2>New product</h2>
         <form action="#" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -43,7 +43,7 @@
             <textarea name="description" placeholder="Description"></textarea>
             <input type="number" name="price" placeholder="Price">
             <div style="display: flex;justify-content: center">
-                <label for="active">Active </label><input style="margin: 5px" type="checkbox" id="active" value="1"
+                <label for="active">Active </label><input style="margin: 5px;width: auto" type="checkbox" id="active" value="1"
                                                           name="active">
             </div>
             <input type="submit" value="Add new product">

@@ -123,7 +123,13 @@ header a:hover {
 .product-box section:hover{
     box-shadow: 1px 1px 10px 1px #00000020;
 }
-
+.product-box section > img {
+    width: 100%;
+    padding: 50px;
+    box-sizing: border-box;
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+}
 
 .product-box {
     max-width: 230px;
@@ -152,7 +158,31 @@ header a:hover {
     margin: 8px;
 
 }
+.product-box section > p {
+    font-size: 12px;
+    margin: 0 10px;
+    font-weight: 300;
+    margin-bottom: 7px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /*the number of line that should be shown: here is 3 line */
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
 
+.product-box section > h3 {
+    margin: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /*The number of line that we have to be shown: bellow*/
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    height: 56px;
+}
 .product-box > a {
     text-decoration: none;
     padding: 5px;
