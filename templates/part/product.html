@@ -1,7 +1,9 @@
 <section class="product-box">
     <img src="{{ url_for('static', filename='cover/'+p.id|string+'.jpg') }}">
-    <span class="tag one"><img src="{{ url_for('static', filename='theme-image/delivery.png') }}">Free Shiping</span>
-    <span class="tag two"><img src="{{ url_for('static', filename='theme-image/original.png') }}">100% Original</span>
+
+
+    <span class="tag one"><img src="{{ url_for('static', filename='theme-image/delivery.png') }}">{{ myconfig.feature1}}</span>
+    <span class="tag two"><img src="{{ url_for('static', filename='theme-image/original.png') }}">{{ myconfig.feature2}}</span>
 {#    <h3>{{ p.name|truncate(50) }}</h3>#}
     <h3>{{ p.name }}</h3>
     <p>{{ p.description|truncate(250) }}<br>

@@ -22,3 +22,9 @@ ABOUT_PAGE_HTML = """
         <li>Address: 355 Example Dr, IL, US </li>
     </ul>
 """
+feature1 = "Free Shipping"
+feature2 = "%100 Original"
+feature3 = "Pay at address"
+feature4 = "Safe Payment"
+feature5 = "30 Days Money Back Quaranteed"
+# Change photoes in static/image as you need
