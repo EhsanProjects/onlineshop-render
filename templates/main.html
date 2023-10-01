@@ -7,10 +7,45 @@
 {% block body %}
 
     {% include 'part/header.html' %}
-
+    <div id="slideshow">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/blf.png') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/hire.png') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/open.png') }}">
+        <a href="http://localhost:5000/?search=asus">
+            <img class="banner" src="{{ url_for('static',filename='image/banner/lasus1.png') }}"></a>
+        <a href="http://localhost:5000/?search=msi">
+            <img class="banner" src="{{ url_for('static',filename='image/banner/lmsi1.png') }}"></a>
+        <a href="http://localhost:5000/?search=dell">
+            <img class="banner" src="{{ url_for('static',filename='image/banner/ldell1.png') }}"></a>
+        <a href="http://localhost:5000/?search=hp">
+            <img class="banner" src="{{ url_for('static',filename='image/banner/lhp1.png') }}"></a>
+        <a href="http://localhost:5000/?search=apple">
+            <img class="banner" src="{{ url_for('static',filename='image/banner/lmck1.png') }}"></a>
+        <a href="http://localhost:5000/?search=sgin">
+            <img class="banner" src="{{ url_for('static',filename='image/banner/lsgin1.png') }}"></a>
+    </div>
     <section class="products">
         {% for p in products %}
             {% include 'part/product.html' %}
         {% endfor %}
     </section>
+    <script>
+
+        const slide_show_items = document.getElementsByClassName('banner')
+        var next_slide = 0
+        const change_slide_show = () => {
+            if (next_slide > slide_show_items.length - 1)
+                next_slide = 0
+
+            if (next_slide == 0)
+                slide_show_items[slide_show_items.length - 1].style.height = "0"
+            else
+                slide_show_items[next_slide - 1].style.height = "0"
+
+            slide_show_items[next_slide].style.height = '300px'
+            next_slide++
+        }
+        change_slide_show()
+        setInterval(change_slide_show, 5000)
+    </script>
 {% endblock %}
