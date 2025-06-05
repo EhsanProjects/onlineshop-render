@@ -2,50 +2,217 @@
 
 {% block header %}
     <title>{{ myconfig.SITE_NAME }}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #main-content {
+            margin-top: 50px;
+            display: flex;
+            width: 100%;
+        }
+
+        aside {
+            width: 10%;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        aside h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        aside ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        aside li {
+            margin-bottom: 10px;
+        }
+
+        section {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .banner {
+            display: block;
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.5s ease-in-out;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+    </style>
+    {% include 'part/header.html' %}
+    <div id="slideshow">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/diorc.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/gucciB.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/jimmyChoo.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/montblancL.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/poloBS.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/sale.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/versace.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/ysl.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/ysl2.webp') }}">
+    </div>
 {% endblock %}
 
 {% block body %}
 
-    {% include 'part/header.html' %}
-    <div id="slideshow">
-        <img class="banner" src="{{ url_for('static',filename='image/banner/blf.png') }}">
-        <img class="banner" src="{{ url_for('static',filename='image/banner/hire.png') }}">
-        <img class="banner" src="{{ url_for('static',filename='image/banner/open.png') }}">
-        <a href="http://localhost:5000/?search=asus">
-            <img class="banner" src="{{ url_for('static',filename='image/banner/lasus1.png') }}"></a>
-        <a href="http://localhost:5000/?search=msi">
-            <img class="banner" src="{{ url_for('static',filename='image/banner/lmsi1.png') }}"></a>
-        <a href="http://localhost:5000/?search=dell">
-            <img class="banner" src="{{ url_for('static',filename='image/banner/ldell1.png') }}"></a>
-        <a href="http://localhost:5000/?search=hp">
-            <img class="banner" src="{{ url_for('static',filename='image/banner/lhp1.png') }}"></a>
-        <a href="http://localhost:5000/?search=apple">
-            <img class="banner" src="{{ url_for('static',filename='image/banner/lmck1.png') }}"></a>
-        <a href="http://localhost:5000/?search=sgin">
-            <img class="banner" src="{{ url_for('static',filename='image/banner/lsgin1.png') }}"></a>
-    </div>
+<div id="main-content">
+    <aside>
+        <h2>Filter Products</h2>
+        <ul>
+            <h3>Category</h3>
+            {% for key, value in myconfig.categories.items() %}
+                <li>
+                    <input type="checkbox" id="{{ key }}" name="category">
+                    <label for="{{ key }}">{{ value }}</label>
+                </li>
+            {% endfor %}
+        </ul>
+        <ul>
+            <h3>Price</h3>
+            <li>
+                <input type="checkbox" id="lessThan500" name="price">
+                <label for="lessThan500">Less than 500</label>
+            </li>
+            <li>
+                <input type="checkbox" id="between501And1000" name="price">
+                <label for="between501And1000">501 to 1000</label>
+            </li>
+            <li>
+                <input type="checkbox" id="moreThan1000" name="price">
+                <label for="moreThan1000">More than 1000</label>
+            </li>
+        </ul>
+        <ul>
+            <h3>Customer Rating</h3>
+            <li>
+                <input type="checkbox" id="5Stars" name="rating">
+                <label for="5Stars">5 stars</label>
+            </li>
+            <li>
+                <input type="checkbox" id="4AndUp" name="rating">
+                <label for="4AndUp">4 & Up</label>
+            </li>
+            <li>
+                <input type="checkbox" id="3AndUp" name="rating">
+                <label for="3AndUp">3 & Up</label>
+            </li>
+            <li>
+                <input type="checkbox" id="2AndUp" name="rating">
+                <label for="2AndUp">2 & Up</label>
+            </li>
+            <li>
+                <input type="checkbox" id="1AndUp" name="rating">
+                <label for="1AndUp">1 & Up</label>
+            </li>
+        </ul>
+        <button id="filterButton">Filter</button>
+    </aside>
+
     <section class="products">
         {% for p in products %}
             {% include 'part/product.html' %}
         {% endfor %}
     </section>
-    <script>
+</div>
 
-        const slide_show_items = document.getElementsByClassName('banner')
-        var next_slide = 0
-        const change_slide_show = () => {
-            if (next_slide > slide_show_items.length - 1)
-                next_slide = 0
+<script>
+    const slide_show_items = document.getElementsByClassName('banner');
+    var next_slide = 0;
 
-            if (next_slide == 0)
-                slide_show_items[slide_show_items.length - 1].style.height = "0"
-            else
-                slide_show_items[next_slide - 1].style.height = "0"
+    const change_slide_show = () => {
+        let newHeight = window.innerWidth <= 730 ? '150px' : '250px';
 
-            slide_show_items[next_slide].style.height = '300px'
-            next_slide++
-        }
-        change_slide_show()
-        setInterval(change_slide_show, 5000)
-    </script>
+        if (next_slide > slide_show_items.length - 1)
+            next_slide = 0;
+
+        if (next_slide == 0)
+            slide_show_items[slide_show_items.length - 1].style.height = "0";
+        else
+            slide_show_items[next_slide - 1].style.height = "0";
+
+        slide_show_items[next_slide].style.height = newHeight;
+        next_slide++;
+    };
+
+    change_slide_show();
+    setInterval(change_slide_show, 5000);
+
+    // Update height on window resize
+    window.addEventListener('resize', change_slide_show);
+
+    // Filter products by selected checkboxes
+    const filterProducts = () => {
+        const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.id);
+        const selectedPrices = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(cb => cb.id);
+        const selectedRatings = Array.from(document.querySelectorAll('input[name="rating"]:checked')).map(cb => cb.id);
+        
+        const products = document.querySelectorAll('.product-box');
+
+        products.forEach(product => {
+            const productCategory = product.getAttribute('data-category');
+            const productPrice = parseFloat(product.getAttribute('data-price'));
+            const productRating = parseFloat(product.getAttribute('data-rating'));
+            
+            const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(productCategory);
+
+            let priceMatch = false;
+            if (selectedPrices.length === 0) {
+                priceMatch = true;
+            } else {
+                selectedPrices.forEach(price => {
+                    if (
+                        (price === "lessThan500" && productPrice < 500) ||
+                        (price === "between501And1000" && productPrice >= 501 && productPrice <= 1000) ||
+                        (price === "moreThan1000" && productPrice > 1000)
+                    ) {
+                        priceMatch = true;
+                    }
+                });
+            }
+
+            let ratingMatch = false;
+            if (selectedRatings.length === 0) {
+                ratingMatch = true;
+            } else {
+                selectedRatings.forEach(rating => {
+                    if (
+                        (rating === "5Stars" && productRating === 5) ||
+                        (rating === "4AndUp" && productRating >= 4) ||
+                        (rating === "3AndUp" && productRating >= 3) ||
+                        (rating === "2AndUp" && productRating >= 2) ||
+                        (rating === "1AndUp" && productRating >= 1)
+                    ) {
+                        ratingMatch = true;
+                    }
+                });
+            }
+
+            if (categoryMatch && priceMatch && ratingMatch) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    };
+
+    document.getElementById('filterButton').addEventListener('click', filterProducts);
+</script>
+
 {% endblock %}

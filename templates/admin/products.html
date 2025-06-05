@@ -10,25 +10,55 @@
         <h1>Products</h1>
         <table>
             <tr>
+                <th>Active</th>
+                <th>Category</th>
                 <th>Photo</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Price</th>
-                <th>Active</th>
+                <th>Discount</th>
+                <th>Discount Expiration</th>
+                <th>Total</th>
                 <th>Edit</th>
+                <th>Delete</th>
             </tr>
 
             {% for p in products %}
                 <tr>
-                    <td><img style="width: 70px" src="/static/cover/{{ p.id }}.jpg"></td>
-                    <td>{{ p.name }}</td>
-                    <td>{{ p.description|truncate(150) }}</td>
-                    <td>{{ p.price }}</td>
-                    {#                    <td> {{ "Yes" if p.active == 1 else "No" }}</td>#}
+                    {#<td> {{ "Yes" if p.active == 1 else "No" }}</td>#}
                     <td><img style="justify-content: center; width: 20px"
                              src="{{ url_for('static', filename='theme-image/done.png') if p.active==1 else url_for('static', filename='theme-image/close.png') }}">
                     </td>
+                      <!-- Added -->
+                      <td>{{ myconfig.categories.get(p.category, 'Unknown Category') }}</td>
+
+
+                    <!-- <td>{{ "Other" if p.category == 1 else "Fragrance" }}</td> -->
+                    <td><img style="width: 70px" src="/static/cover/{{ p.id }}.jpg"></td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.description|truncate(150) }}</td>
+                    <td>${{ p.price }}</td>
+                    
+                    {% set discount_percent = None %}
+                    {% for pset in productsset %}
+                        {% if pset.product_id == p.id %}
+                            {% set discount_percent = product_discounts.get(pset.discount_id) %}
+                            {% set discount_expiration = discount_expiration.get(pset.discount_id) %}
+                            {% set discount_active = discounts_active.get(pset.discount_id) %}
+                            <td>{{ discount_percent if discount_percent else "No Discount" }}{% if discount_percent %}%{% endif %}</td>
+                           
+                            <td> {{discount_expiration}}
+                            </td>
+                            {% if discount_active == 1 and p.active==1 and discount_expiration>today%}
+                                <td>${{(p.price*(1-discount_percent/100))| round(2)}} </td>
+                            {%else%}
+                                <td>${{p.price}} </td>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    
                     <td><a href="/admin/dashboard/edit-product/{{ p.id }}">Edit</a></td>
+                    <td><a href="/admin/dashboard/delete-product/{{ p.id }}">Delete</a></td>
                 </tr>
             {% endfor %}
 
@@ -42,6 +72,22 @@
             <input type="text" name="name" placeholder="Product Name">
             <textarea name="description" placeholder="Description"></textarea>
             <input type="number" name="price" placeholder="Price">
+            <!-- Added -->
+            <select id="category" name="category">
+                {% for key, value in myconfig.categories.items() %}
+                     <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+
+           <select id="discount_id" name="discount_id">
+                <option value="">Select Discount</option>
+                {% for discount in discounts %}
+                  {% if discount.active == 1 %}
+                      <option value="{{ discount.id }}">{{ discount.discountpercent }}% (expires {{ discount.expiration_date.strftime('%Y-%m-%d') }})</option>
+                  {% endif %}
+                {% endfor %}
+            </select>
+
             <div style="display: flex;justify-content: center">
                 <label for="active">Active </label><input style="margin: 5px;width: auto" type="checkbox" id="active" value="1"
                                                           name="active">

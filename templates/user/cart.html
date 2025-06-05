@@ -5,33 +5,22 @@
 {% endblock %}
 
 {% block body %}
-    {% include'part/header.html' %}
-
-    {##}
-    {#{% set x = 0 %}#}
-    {#{% for cart_item in cart.cart_items %}#}
-    {#    {% set x = x + cart_item.quantity %}#}
-    {#{% endfor %}#}
-    {#<h1>Cart ({{ x }} items)</h1>#}
-
+    {% include 'part/header.html' %}
 
     <section class="simple-box">
-<h1>Your Cart: </h1>
-
-        {% if cart != None and cart.cart_items|list|length > 0 %}
+        <h1>Your Cart: </h1>
+        {% if cart and cart.cart_items|list|length > 0 %}
             <table class="cart">
-
                 <tr>
+                    <th class="title">Item</th>
                     <th class="title">Name</th>
                     <th class="title">Price</th>
                     <th class="title">Quantity</th>
                     <th class="title">Subtotal</th>
-
                 </tr>
-
-
                 {% for cart_item in cart.cart_items %}
                     <tr>
+                        <td><img style="width: 70px" src="/static/cover/{{ cart_item.product.id }}.jpg"></td>
                         <td>{{ cart_item.product.name }}</td>
                         <td class="price">{{ cart_item.product.price }}</td>
                         <td class="small-ellipse quantity-column">
@@ -42,26 +31,37 @@
                         </td>
                         <td class="price">{{ cart_item.quantity * cart_item.product.price }}</td>
                     </tr>
-
-
                 {% endfor %}
-
             </table>
+           
+            <form action="{{ url_for('user.cart') }}" method="POST">
+               
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                <div>
+                    <label for="coupon_code">Coupon Code:</label>
+                    <input type="text" id="coupon_code" name="coupon_code" placeholder="Enter your coupon code">
+                </div>
+                <input type="submit" value="Apply Coupon">
+            </form>
+            
             <div class="price-box-box">
-                {#                Total price:#}
-                <span class="price">{{ cart.total_price() }}</span>
-                <a class="add-to-cart-btn2 icon" href="/payment">Checkout<img
+                <span class="total-price">Total: ${{ "%.2f"|format(cart.total_price()) }}</span>
+                {% if discounted_total != cart.total_price() %}
+                    <br>
+                    <span class="total-price">Discounted Total: ${{ "%.2f"|format(discounted_total|ceil) }}</span>
+                    <!-- <a class="add-to-cart-btn2 icon" href="/payment?discounted_total={{ discounted_total|ceil }}">Checkout<img
+                        src="{{ url_for('static', filename='theme-image/payment.png') }}"></a> -->
+                    <a class="add-to-cart-btn2 icon" href="/payment">Checkout<img
+                            src="{{ url_for('static', filename='theme-image/payment.png') }}"></a>
+                {%else%}
+                     <a class="add-to-cart-btn2 icon" href="/payment">Checkout<img
                         src="{{ url_for('static', filename='theme-image/payment.png') }}"></a>
-
+                {% endif %}
+                
             </div>
-
         {% else %}
             <i style="display: block;text-align: center;">Cart is empty!</i>
         {% endif %}
     </section>
-
-
 {% endblock %}
-
-
-

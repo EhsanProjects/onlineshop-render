@@ -1,5 +1,5 @@
 import os
-
+# ER Diagram : https://www.convertcsv.com/sqlite-online.htm
 SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "1"
@@ -12,6 +12,15 @@ def generate_secret_key(length=32):
 # SECRET_KEY = generate_secret_key()
 SECRET_KEY = "sdaksd$$%%asd@@jsdljka435345hsdohssasjld"
 
+# Added
+RECAPTCHA_PUBLIC_KEY = '6LdUuQcqAAAAAH4IoOikoKuVH7NJhSBbaCH_86MD'
+RECAPTCHA_PRIVATE_KEY ='6LdUuQcqAAAAACN8W0_IUxBJPMLC6sgzwpaq4H8l'
+
+
+PAYMENT_MERCHANT = "sandbox"
+PAYMENT_CALLBACK = "http://localhost:5000/verify"
+PAYMENT_FIRST_REQUEST_URL = 'https://sandbox.shepa.com/api/v1/token'
+PAYMENT_VERIFY_REQUEST_URL = 'https://sandbox.shepa.com/api/v1/verify'
 
 SITE_NAME = "<your website name> Online Shopping"
 ABOUT_PAGE_HTML = """
@@ -22,9 +31,23 @@ ABOUT_PAGE_HTML = """
         <li>Address: 355 Example Dr, IL, US </li>
     </ul>
 """
-feature1 = "Free Shipping"
+feature1 = "Free Shippingg"
 feature2 = "%100 Original"
 feature3 = "Pay at address"
 feature4 = "Safe Payment"
 feature5 = "30 Days Money Back Quaranteed"
-# Change photoes in static/image as you need
+# Change photoes in the static/image as you need
+
+# Added
+
+
+categories= {
+        1: 'Other',
+        2: 'Fragrance',
+        3: 'Car',
+        4: 'Mobile',
+        5: 'Toys',
+        6: 'Electronics'
+    }
+
+

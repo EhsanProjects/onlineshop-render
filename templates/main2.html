@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>{{ myconfig.SITE_NAME }}</title>
+{% endblock %}
+
+{% block body %}
+
+    {% include 'part/header.html' %}
+    <div id="slideshow">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/diorc.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/gucciB.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/jimmyChoo.webp') }}">
+        <!-- <a href="http://localhost:5000/?search=asus"> -->
+        <img class="banner" src="{{ url_for('static',filename='image/banner/montblancL.webp') }}"></a>
+        <!-- <a href="http://localhost:5000/?search=msi"> -->
+        <img class="banner" src="{{ url_for('static',filename='image/banner/poloBS.webp') }}"></a>
+        <!-- <a href="http://localhost:5000/?search=dell"> -->
+        <img class="banner" src="{{ url_for('static',filename='image/banner/sale.webp') }}"></a>
+        <!-- <a href="http://localhost:5000/?search=hp"> -->
+        <img class="banner" src="{{ url_for('static',filename='image/banner/versace.webp') }}"></a>
+        <!-- <a href="http://localhost:5000/?search=apple"> -->
+        <img class="banner" src="{{ url_for('static',filename='image/banner/ysl.webp') }}"></a>
+        <!-- <a href="http://localhost:5000/?search=sgin"> -->
+        <img class="banner" src="{{ url_for('static',filename='image/banner/ysl2.webp') }}"></a>
+    </div>
+    <section class="products">
+        {% for p in products %}
+            {% include 'part/product.html' %}
+        {% endfor %}
+    </section>
+    <!-- <script>
+
+        const slide_show_items = document.getElementsByClassName('banner')
+        var next_slide = 0
+        const change_slide_show = () => {
+            if (next_slide > slide_show_items.length - 1)
+                next_slide = 0
+
+            if (next_slide == 0)
+                slide_show_items[slide_show_items.length - 1].style.height = "0"
+            else
+                slide_show_items[next_slide - 1].style.height = "0"
+
+            slide_show_items[next_slide].style.height = '300px'
+            next_slide++
+        }
+        change_slide_show()
+        setInterval(change_slide_show, 5000)
+    </script> -->
+    <script>
+        const slide_show_items = document.getElementsByClassName('banner');
+        var next_slide = 0;
+    
+        const change_slide_show = () => {
+            let newHeight = window.innerWidth <= 730 ? '150px' : '250px';
+    
+            if (next_slide > slide_show_items.length - 1)
+                next_slide = 0;
+    
+            if (next_slide == 0)
+                slide_show_items[slide_show_items.length - 1].style.height = "0";
+            else
+                slide_show_items[next_slide - 1].style.height = "0";
+    
+            slide_show_items[next_slide].style.height = newHeight;
+            next_slide++;
+        };
+    
+        change_slide_show();
+        setInterval(change_slide_show, 5000);
+    
+        // Update height on window resize
+        window.addEventListener('resize', change_slide_show);
+    </script>
+    
+
+{% endblock %}

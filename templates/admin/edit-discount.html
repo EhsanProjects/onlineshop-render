@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>Edit Discount | ID Number:  {{ discount.id }}</title>
+{% endblock %}
+
+{% block body %}
+    {% include 'part/header.html' %}
+    <section class="simple-box big">
+    <h1>Edit Discount | ID Number:  {{ discount.id }}</h1>
+
+    <form action="#" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      
+        
+        <input type="number" name="discount" value="{{ discount.discountpercent }}" placeholder="{{ discount.discountpercent }}">
+        
+        <!-- Added -->
+        
+        <div style="display: flex; justify-content: center">
+            <label for="active">Active </label>
+            <input style="margin: 5px; width:auto" id="active" type="checkbox" value="1" name="active" {{ "checked" if discount.active == 1 }}><br>
+        </div>
+
+        <input type="submit" value="Add new Discount">
+    </form>
+    </section>
+{% endblock %}
+
+
+

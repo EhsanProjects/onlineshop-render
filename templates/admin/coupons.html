@@ -1,0 +1,58 @@
+
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>Manage Coupons</title>
+{% endblock %}
+
+{% block body %}
+    {% include "part/header.html" %}    
+    <section class="simple-box">
+        <h1>Manage Coupons</h1>
+        <form action="" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="text" name="code" placeholder="Coupon Code" required>
+            <input type="number" name="discount_percent" placeholder="Discount Percent" required>
+            <input type="date" name="start_date" placeholder="Start Date" required>
+            <input type="date" name="end_date" placeholder="Expiration Date" required>
+            <input type="number" name="usage_limit" placeholder="Usage Limit" >
+            <button type="submit">Add Coupon</button>
+        </form>
+    </section>
+    <section class="simple-box">
+        <h2>Existing Coupons</h2>
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Discoun</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Usage Limit</th>
+                <th>Used Count</th>
+                <th>Product id </th>
+                <th>User id </th>
+                <th>Minimum order </th>
+                <th>Active</th>
+            </tr>
+            {% for coupon in coupons %}
+                <tr>
+                    <td>{{ coupon.code }}</td>
+                    <td>{{ coupon.discount_percent }}%</td>
+                    <td>{{ coupon.start_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ coupon.end_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ coupon.usage_limit }}</td>
+                    <td>{{ coupon.used_count }}</td>
+                    <td>{{ coupon.product_id }}</td>
+                    <td>{{ coupon.user_id }}</td>
+                    <td>{{ coupon.min_order }}</td>
+                    
+                    <td><img style="justify-content: center; width: 20px"
+                        src="{{ url_for('static', filename='theme-image/done.png') if coupon.active==1 else url_for('static', filename='theme-image/close.png') }}">
+                    </td>
+                    <td><a href="/admin/dashboard/edit-coupon/{{ coupon.id }}">Edit</a></td>
+                    <td><a href="/admin/dashboard/coupon-deactive/{{ coupon.id }}">Deactive</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
+{% endblock %}

@@ -21,6 +21,7 @@
         </form>
         <table class="cart" style="margin-top: 30px">
             <tr>
+                <th class="title">Item</th>
                 <th class="title">Product ID</th>
                 <th class="title">Product Name</th>
                 <th class="title">Price</th>
@@ -29,6 +30,7 @@
             </tr>
             {% for item in cart.cart_items %}
                 <tr>
+                    <td><img style="width: 70px" src="/static/cover/{{ item.product.id }}.jpg"></td>
                     <td>{{ item.product.id }}</td>
                     <td>{{ item.product.name }}</td>
                     <td class="price">{{ item.price }}</td>
@@ -42,19 +44,51 @@
             </tr>
         </table>
 
-        <table class="cart" style="margin-top: 30px">
+        <table class="cart-order" style="margin-top: 60px; width: 100%;">
             <tr>
                 <td>Status</td>
-                <td>Price</td>
+              
                 <td>Refrence ID</td>
+                <td>Transaction ID</td>
+                <td>Card Pan</td>
+                <td>Date/Time</td>
+                <td>Paid amount</td>
+                <td>Coupon</td>
+                <td>Discount</td>
+                <td>Original Price</td>
             </tr>
-            {% for pay in cart.payments %}
+            {% for pay in payments %}<!-- not cart.payments-->
                 <tr>
                     <td>{{ pay.status }}</td>
-                    <td class="price">{{ pay.price }}</td>
-                    <td>{{ pay.refid }}</td>
+                    <td class="maxfit">{{ pay.refid }}</td>
+                    <td>{{pay.transaction_id}}</td>
+                    <td class="maxfit">{{pay.card_pan}}</td>
+                    <td>{{pay.date_created}}</td>
+                    <td class="{% if pay.amount_to_pay %}price{% endif %}">
+                        {{pay.amount_to_pay or '---'}}</td>
+                    <td>{{ pay.coupon_code or '---'}}</td>
+                    <td>
+                        {% if   pay.discount_percent %}
+                            %{{  pay.discount_percent  }}
+                        {% else %}
+                            {{ '---' }}
+                        {% endif %}
+                    </td>
+                    <td class="{% if pay.amount_to_pay and pay.discount_percent %}price{% endif %}">
+                        {% if pay.amount_to_pay  and pay.discount_percent %}
+                            {{ pay.amount_to_pay / (1 - pay.discount_percent / 100) }}
+                        {% else %}
+                            ---
+                        {% endif %}
+                        
+                    </td>
                 </tr>
+                <!-- <tr><td colspan="8">Debug: {{ pay }}</td></tr> Add this line for debugging -->
+            {% else %}
+                <tr><td colspan="8">No payments found.</td></tr>
             {% endfor %}
+
+          
         </table>
 
 

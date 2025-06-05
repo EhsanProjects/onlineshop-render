@@ -1,8 +1,6 @@
 from sqlalchemy import *
-from sqlalchemy.orm import backref
-
 from  extensions import db
-
+from sqlalchemy.orm import backref
 
 class CartItem(db.Model):
     __tablename__ = "cart_items"

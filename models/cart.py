@@ -10,7 +10,8 @@ class Cart(db.Model):
     status = Column(String, default="pending")
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     user = db.relationship("User", backref=backref('carts', lazy='dynamic'))
-
+    discounted_total = Column(Float, nullable=True)  # Added this line
+    
     def total_price(self):
         total = 0
         for item in self.cart_items:

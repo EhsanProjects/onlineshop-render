@@ -251,13 +251,13 @@ a > img {
     max-width: 800px;
     width: 100%;
     margin: auto;
-    border-radius: 35px;
+    border-radius: 45px;
     transition: height 400ms ease-out !important;
 }
 
 #slideshow {
     margin-top: 30px;
-    height: 300px;
+    height: 250px;
 }
 
 .tag {
@@ -276,6 +276,22 @@ a > img {
     margin-right: 5px;
 }
 
+.total-price {
+    font-family: 'Times New Roman';
+    font-weight: bold;
+    bottom: 100px;
+}
+td.otal-price{
+    font-weight: normal;
+}
+.total-price {
+    font-family: 'Times New Roman';
+    font-weight: bold;
+    bottom: 100px;
+}
+td.total-price{
+    font-weight: normal;
+}
 .price {
     font-family: 'Times New Roman';
     font-weight: bold;
@@ -297,7 +313,23 @@ a.icon > img {
     width: 30px;
     margin-right: 5px;
 }
+.cart-btn {
+    margin-top: 4px; 
+    text-decoration: none;
+    padding: 5px;
+    color: #f2eeee;
+    background: #ef323220;
+    border-bottom-right-radius: 9px;
+    border-bottom-left-radius: 9px;
+    border-top-right-radius: 9px;
+    border-top-left-radius: 9px;
+    font-weight: 400;
+    justify-content: left;
+}
 
+.cart-btn:hover {
+    background: rgb(165, 158, 231);
+}
 .add-to-cart-btn2 {
     text-decoration: none;
     padding: 5px;
@@ -447,6 +479,44 @@ table tr:nth-child(even) {
 table tr:last-child td {
     border: none;
 }
+
+
+
+table.cart-order {
+    width: 100%;
+    margin: auto;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ensure equal column width */
+}
+
+table.cart-order th, table.cart-order td {
+    padding: 10px;
+    border: 1px solid #ddd; /* Add border for clarity */
+    text-align: left; /* Align text to the left */
+    word-break: break-word; /* Break long words */
+    overflow-wrap: break-word; /* Ensure long words or URLs wrap within their cell */
+}
+
+table.cart-order th {
+    background-color: #de9696; /* Add a background color to header */
+}
+
+table.cart-order td.price {
+    color: green; /* Example: Different color for price */
+    font-weight: bold; /* Make the price bold */
+}
+table.cart-order tr:last-child td {
+     border: 1px solid #ddd; /* Add border for clarity */
+}
+table.cart-order .maxfit {
+    max-width: 150px; /* Set a maximum width for column */
+}
+
+
+
+
+
+
 table.cart td{
     padding: 17px;
     /*border-bottom:1px solid #777676;*/
@@ -467,14 +537,15 @@ table.cart{
     align-items: center;
     border: 1px solid #696767;
     height: 3px;
-    margin-top: 8px;
+    margin-top: 45px;
     font-family: "Times New Roman";
     padding-right: 20px;
 }
+
 .cartitem-decrease-increase{
     width: 20px;
     margin-left: 1px;
-    padding: 2px;
+    padding: 5px;
 
     flex: 0;
     text-decoration: none;
@@ -543,6 +614,11 @@ table.cart{
 /*--------------------------------------------------------------------------------*/
 @media (max-width: 730px) {
     /*#header-menu-btn{visibility: visible}*/
+   
+    #slideshow {
+        margin-top: 30px;
+        height: 150px;
+    }
     header > section > div {
         display: block;
         position: absolute;

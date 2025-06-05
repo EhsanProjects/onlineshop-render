@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>{{ myconfig.SITE_NAME }}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #main-content {
+            margin-top: 50px;
+            display: flex;
+            width: 100%;
+        }
+
+        aside {
+            width: 10%;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        aside h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        aside ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        aside li {
+            margin-bottom: 10px;
+        }
+
+        section {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .banner {
+            display: block;
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.5s ease-in-out;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+    </style>
+    {% include 'part/header.html' %}
+    <div id="slideshow">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/diorc.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/gucciB.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/jimmyChoo.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/montblancL.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/poloBS.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/sale.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/versace.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/ysl.webp') }}">
+        <img class="banner" src="{{ url_for('static',filename='image/banner/ysl2.webp') }}">
+    </div>
+{% endblock %}
+
+{% block body %}
+
+<div id="main-content">
+    <aside>
+        <h2>Filter Products</h2>
+        <ul>
+            <h3>Category</h3>
+            {% for key, value in myconfig.categories.items() %}
+                <li>
+                    <input type="checkbox" id="{{ key }}" name="{{ key }}">
+                    <label for="{{ key }}">{{ value }}</label>
+                </li>
+            {% endfor %}
+        </ul>
+        <ul>
+            <h3>Price</h3>
+            <li>
+                <input type="checkbox" id="price-less-500" name="price" value="less-500">
+                <label for="price-less-500">Less than $500</label>
+            </li>
+            <li>
+                <input type="checkbox" id="price-500-1000" name="price" value="500-1000">
+                <label for="price-500-1000">$501 - $1000</label>
+            </li>
+            <li>
+                <input type="checkbox" id="price-more-1000" name="price" value="more-1000">
+                <label for="price-more-1000">More than $1000</label>
+            </li>
+        </ul>
+        <button id="filterButton">Filter</button>
+    </aside>
+
+    <section class="products">
+        {% for p in products %}
+            {% include 'part/product.html' %}
+        {% endfor %}
+    </section>
+</div>
+
+<script>
+    const slide_show_items = document.getElementsByClassName('banner');
+    var next_slide = 0;
+
+    const change_slide_show = () => {
+        let newHeight = window.innerWidth <= 730 ? '150px' : '250px';
+
+        if (next_slide > slide_show_items.length - 1)
+            next_slide = 0;
+
+        if (next_slide == 0)
+            slide_show_items[slide_show_items.length - 1].style.height = "0";
+        else
+            slide_show_items[next_slide - 1].style.height = "0";
+
+        slide_show_items[next_slide].style.height = newHeight;
+        next_slide++;
+    };
+
+    change_slide_show();
+    setInterval(change_slide_show, 5000);
+
+    // Update height on window resize
+    window.addEventListener('resize', change_slide_show);
+
+    // Filter products by selected checkboxes
+    const filterProducts = () => {
+        const selectedCheckboxes = document.querySelectorAll('aside input[type="checkbox"]:checked');
+        const products = document.querySelectorAll('.product-box');
+
+        let selectedCategories = [];
+        let selectedPrices = [];
+
+        selectedCheckboxes.forEach(cb => {
+            if (cb.name === "price") {
+                selectedPrices.push(cb.value);
+            } else {
+                selectedCategories.push(cb.id);
+            }
+        });
+
+        products.forEach(product => {
+            const productCategory = product.getAttribute('data-category');
+            const productPrice = parseFloat(product.getAttribute('data-price'));
+
+            let categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(productCategory);
+            let priceMatch = false;
+
+            if (selectedPrices.includes('less-500')) {
+                priceMatch = priceMatch || productPrice < 500;
+            }
+
+            if (selectedPrices.includes('500-1000')) {
+                priceMatch = priceMatch || (productPrice >= 501 && productPrice <= 1000);
+            }
+
+            if (selectedPrices.includes('more-1000')) {
+                priceMatch = priceMatch || productPrice > 1000;
+            }
+
+            if (categoryMatch && priceMatch) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    };
+
+    document.getElementById('filterButton').addEventListener('click', filterProducts);
+</script>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>Admin Discounts</title>
+{% endblock %}
+
+{% block body %}
+    {% include "part/header.html" %}
+    <section class="simple-box">
+        <h1>Discounts</h1>
+        <table>
+            <tr>
+                <th>id</th>
+                <th>Discount</th>
+                <th>Created at</th>
+                <th>Modified at</th>
+                <th>Deleted at</th>
+                <th>Active</th>
+                <th>Expiration</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+
+            {% for d in discounts %}
+                <tr>
+                      <!-- Added -->
+                    
+                    <td>{{ d.id }}</td>
+                    <td>{{ d.discountpercent }}%</td>
+                    <td>{{ d.created_at }}</td>
+                    <td>{{ d.modified_at }}</td>
+                    <td>{{ d.deleted_at }}</td>
+                    {#                    <td> {{ "Yes" if d.active == 1 else "No" }}</td>#}
+                    <td><img style="justify-content: center; width: 20px"
+                             src="{{ url_for('static', filename='theme-image/done.png') if d.active==1 else url_for('static', filename='theme-image/close.png') }}">
+                    </td>
+                    <td>{{d.expiration_date}}</td>
+                    <td><a href="/admin/dashboard/edit-discount/{{ d.id }}">Edit</a></td>
+                    <td><a href="/admin/dashboard/discount-deactive/{{ d.id }}">Deactive</a></td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </section>
+    <section class="simple-box big">
+        <h2>New Discount</h2>
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          
+            
+            <input type="number" name="discount" placeholder="Discount Amount">
+            <!-- Added -->
+            <div style="display: flex; justify-content: center">
+                <label for="expiration_date">Expiration Date</label>
+                <input type="date" id="expiration_date" name="expiration_date" >
+            </div>
+
+           
+
+            <div style="display: flex;justify-content: center">
+                <label for="active">Active </label><input style="margin: 5px;width: auto" type="checkbox" id="active" value="1"
+                                                          name="active">
+            </div>
+            <input type="submit" value="Add new Discount">
+        </form>
+    </section>
+
+{% endblock %}
+
+
+

@@ -9,3 +9,4 @@ class User(db.Model, UserMixin):
     phone = Column(String(11), nullable=False, index=True)
     address = Column(String, nullable=False, index=True)
     date_created = Column(String(15), default=get_current_time)
+    modified_at = Column(DateTime, default=func.now(), onupdate=func.now())

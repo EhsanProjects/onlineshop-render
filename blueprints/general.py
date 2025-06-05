@@ -14,7 +14,8 @@ def main():  # put application's code here
     products = Product.query.filter(Product.active == 1)
     if search != None:
         products = products.filter(Product.name.like(f'%{search}%'))
-    # products = products.order_by(Product.price.desc()).all()  ///////order by price
+    # ///////order by price
+    # products = products.order_by(Product.price.desc()).all()  
     products = products.order_by(func.random()).all()
 
     # products = Product.query.filter(Product.active == 1).all()

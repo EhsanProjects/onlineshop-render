@@ -1,4 +1,8 @@
 from flask import Flask, redirect, url_for, flash
+from flask_wtf import FlaskForm, RecaptchaField
+from wtforms import StringField,PasswordField
+from wtforms.validators import InputRequired, length,AnyOf
+
 from flask_wtf.csrf import CSRFProtect
 import config
 import extensions
@@ -14,6 +18,12 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 app.config['SECRET_KEY'] = config.SECRET_KEY
 extensions.db.init_app(app)
+
+# Added2
+app.config["RECAPTCHA_PUBLIC_KEY"] = config.RECAPTCHA_PUBLIC_KEY
+app.config["RECAPTCHA_PRIVATE_KEY"] = config.RECAPTCHA_PRIVATE_KEY
+# app.config["VERIFY_URL"] = config.VERIFY_URL
+# app.config['TESTING']=True
 
 app.register_blueprint(general)
 app.register_blueprint(admin)

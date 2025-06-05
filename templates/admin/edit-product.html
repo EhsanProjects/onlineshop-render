@@ -7,22 +7,46 @@
 {% block body %}
     {% include 'part/header.html' %}
     <section class="simple-box big">
-    <h1>Edit Product | Product Number:  {{ product.id }}</h1>
+    <h1>Edit Product | Product Number:  {{ product.id }} </h1>
 
-    <td><img style="width: 120px;margin: auto;display: block" src="{{  url_for('static',filename='cover/'+product.id|string+".jpg")}}"></td>
+    <td><img style="width: 120px; margin: auto; display: block" src="{{  url_for('static', filename='cover/' + product.id|string + ".jpg") }}"></td>
     <form action="#" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <input type="file" name="cover">
         <input type="text" name="name" value="{{ product.name }}" placeholder="Product Name">
-        <textarea name="description"  placeholder="Description">{{ product.description }}</textarea>
+        <textarea name="description" placeholder="Description">{{ product.description }}</textarea>
         <input type="number" name="price" value="{{ product.price }}" placeholder="Product Price">
-        <div style="display: flex;justify-content: center">
-        <label for="active">Active </label><input style="margin: 5px; width:auto" id="active" type="checkbox" value="1" name="active" {{ "checked" if product.active == 1  }}><br>
-   </div>
+        <!-- Added -->
+        <select id="category" name="category">
+            {% for key, value in myconfig.categories.items() %}
+                <option value="{{ key }}" {% if key == product.category %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+       
+        <select id="discount_id" name="discount_id">
+            <option value="">Select Discount</option>
+            {% set existing_discounts = products_with_discounts | map(attribute=1) | list %}
+            {% for p in products_with_discounts %}
+                {% if p[0] %}
+                    <option value="{{ p[0] }}" selected>{{ p[1] }}% current discount</option>
+                {% endif %}
+            {% endfor %}
+
+            {% for discount in discounts %}
+                {% if discount.active == 1 and discount.discountpercent not in existing_discounts %}
+                    
+                    <option value="{{ discount.id }}">{{ discount.discountpercent }}%</option>
+                  
+                {% endif %}
+               
+            {% endfor %}
+        </select>
+       
+        <div style="display: flex; justify-content: center">
+            <label for="active">Active </label>
+            <input style="margin: 5px; width:auto" id="active" type="checkbox" value="1" name="active" {{ "checked" if product.active == 1 }}><br>
+        </div>
         <input type="submit" value="Save">
     </form>
     </section>
 {% endblock %}
-
-
-

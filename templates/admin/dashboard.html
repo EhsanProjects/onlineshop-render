@@ -13,39 +13,61 @@
         <h1>Your Orders: </h1>
         {% if carts|list|length > 0 %}
             <table class="cart">
-                <tr>
-                    <th class="title">Order Number</th>
-                    <th class="title">UserName</th>
-                    <th class="title">Phone</th>
-                    <th class="title">Status</th>
-                    <th class="title">Show Order</th>
-                </tr>
-
-                {% for cart in carts|selectattr('status','==','pending') %}
+                <thead>
                     <tr>
-                        <td>{{ cart.id }}</td>
-                        <td>{{ cart.user.username }}</td>
-                        <td>{{ cart.user.phone }}</td>
-                        <td>{{ cart.status }}</td>
-                        <td><a href="{{ url_for('admin.order',id=cart.id) }}"> Details </a></td>
+                        <!-- <th class="title"><a href="{{ url_for('admin.dashboard', sort_by='order_number', sort_order='asc' if request.args.get('sort_order') == 'desc' else 'desc') }}">Order Number</a></th> -->
+                        <th class="title"><a href="{{ url_for('admin.dashboard', sort_by='username', sort_order='asc' if request.args.get('sort_order') == 'desc' else 'desc')  }}">UserName</a></th>
+                        <th class="title"><a href="{{ url_for('admin.dashboard', sort_by='phone', sort_order='asc' if request.args.get('sort_order') == 'desc' else 'desc')  }}">Phone</a></th>
+                        <th class="title"><a href="{{ url_for('admin.dashboard', sort_by='status', sort_order='asc' if request.args.get('sort_order') == 'desc' else 'desc')  }}">Status</a></th>
+                        <th class="title">Number of ordes</th>
+                        <th class="title">Details</th>
                     </tr>
-                {% endfor %}
-
-                {% for cart in carts|selectattr('status','!=','pending') %}
-                    <tr>
-                        <td>{{ cart.id }}</td>
-                        <td>{{ cart.user.username }}</td>
-                        <td>{{ cart.user.phone }}</td>
-                        <td>{{ cart.status }}</td>
-                        <td><a href="{{ url_for('admin.order',id=cart.id) }}"> Details </a></td>
-                    </tr>
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for cart in carts %}
+                        <tr>
+                            <!-- <td>{{ cart.id }}</td> -->
+                            <td>{{ cart.username }}</td>
+                            <td>{{ cart.phone }}</td>
+                            <td>{{ cart.status }}</td>
+                            <td>{{ cart.OrderCount }}</td>
+                            <td><a href="{{ url_for('admin.order_details',username=cart.username, status=cart.status) }}"> Details </a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         {% else %}
             <i style="display: block;text-align: center;">There is no Order!</i>
         {% endif %}
     </section>
 
+
+    {% if detailed_orders %}
+        <section class="simple-box cart" style="max-width: 700px; margin-top: 20px;">
+            <h2>Order Details for {{ detailed_orders[0].username }} - {{ detailed_orders[0].status }}</h2>
+            <table class="cart">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        
+                        <th>Total Price</th>
+                        <th>Show order</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in detailed_orders %}
+                        <tr>
+                            <td>{{ order.order_number }}</td>
+                            <td>{{ order.total_price  }}</td>
+                            <td><a href="{{ url_for('admin.order_details', order_number=order.order_number) }}">Details</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    {% endif %}
 
 
 
