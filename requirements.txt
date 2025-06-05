@@ -18,7 +18,7 @@ MarkupSafe==2.1.3
 packaging==25.0
 passlib==1.7.4
 requests==2.31.0
-SQLAlchemy==1.2.4
+SQLAlchemy
 stripe==6.4.0
 typing_extensions==4.7.1
 urllib3==2.0.4
