@@ -8,7 +8,7 @@ import config
 import extensions
 from blueprints.general import app as general
 from blueprints.admin import app as admin
-from blueprints.user import app as user
+from blueprints.user import app as user, check_shepa_status
 
 from flask_login import LoginManager
 
@@ -46,6 +46,14 @@ def unauthorized():
         return redirect(url_for('user.login'))
 
 
+@app.route('/test-shepa')
+def test_shepa():
+    if check_shepa_status():
+        return "✅ Shepa.com is UP"
+    else:
+        return "❌ Shepa.com is DOWN — check your UI for flash message."
+
+
 @app.context_processor
 def inject_dict_for_all_templates():
     return dict(myconfig=config)
@@ -55,3 +63,5 @@ with app.app_context():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
+
+

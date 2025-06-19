@@ -18,7 +18,9 @@ RECAPTCHA_PRIVATE_KEY ='6LdUuQcqAAAAACN8W0_IUxBJPMLC6sgzwpaq4H8l'
 
 
 PAYMENT_MERCHANT = "sandbox"
-PAYMENT_CALLBACK = "http://localhost:5000/verify"
+#website callback after payment
+PAYMENT_CALLBACK = "https://onlineshop-render.onrender.com/verify"
+# PAYMENT_CALLBACK = "http://localhost:5000/verify"
 PAYMENT_FIRST_REQUEST_URL = 'https://sandbox.shepa.com/api/v1/token'
 PAYMENT_VERIFY_REQUEST_URL = 'https://sandbox.shepa.com/api/v1/verify'
 

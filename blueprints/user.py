@@ -11,6 +11,18 @@ from models.Payment import Payment
 from models.cart_item import CartItem
 from models.coupon import Coupon
 from models.product import Product
+import os
+IS_DEV = os.environ.get('FLASK_ENV') == 'development'
+def check_shepa_status():
+    try:
+        response = requests.get("https://sandbox.shepa.com", timeout=5)
+        if response.status_code >= 500:
+            flash("Shepa.com is currently experiencing server issues. Please try again later.", "danger")
+            return False
+        return True
+    except requests.RequestException:
+        flash("Cannot connect to Shepa.com to make a payment. It may be down. Please try again later.", "danger")
+        return False
 
 # Added
 from models.product_set import ProductSet
@@ -214,6 +226,9 @@ def payment():
     if not cart:
         flash('No pending cart found.', 'danger')
         return redirect(url_for('user.cart'))  # Ensure you have a 'cart' route
+    # Check Shepa availability before calling their API
+    if not check_shepa_status():
+        return redirect(url_for('user.cart'))
 
     try:
         # discounted_total = request.args.get('discounted_total')
@@ -231,7 +246,7 @@ def payment():
 
         r.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
         response_data = r.json()
-
+        print(response_data)
         # Log the entire response for debugging purposes
         current_app.logger.debug('Response from payment API: %s', response_data)
 
@@ -260,12 +275,19 @@ def payment():
         return redirect(url)
 
     except requests.RequestException as e:
-        app.logger.error('Payment request failed: %s', e)
-        flash('4Payment request failed. Please try again later.', 'danger')
+        current_app.logger.error('Payment request failed: %s', e)
+        # Optional: show debug info in development
+        if IS_DEV:
+            flash(f'Debug info: {str(e)}', 'warning')
+        # Check if the error indicates a Gateway Timeout
+        if '504' in str(e) or 'Gateway Timeout' in str(e):
+            flash('The payment gateway (Shepa) is temporarily down (504 Gateway Timeout). Please try again later.', 'danger')
+        else:
+            flash('4Payment request failed. Please try again later.', 'danger')
         return redirect(url_for('user.cart'))  # Ensure you have a 'cart' route
 
     except KeyError as e:
-        app.logger.error('Key error: %s', e)
+        current_app.logger.error('Key error: %s', e)
         flash('Unexpected response from the payment server. Please try again later.', 'danger')
         return redirect(url_for('user.cart'))  # Ensure you have a 'cart' route
     
