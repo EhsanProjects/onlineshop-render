@@ -12,16 +12,29 @@ from models.cart_item import CartItem
 from models.coupon import Coupon
 from models.product import Product
 import os
+
+from models.shepa_log import ShepaStatusLog
 IS_DEV = os.environ.get('FLASK_ENV') == 'development'
+
 def check_shepa_status():
     try:
-        response = requests.get("https://sandbox.shepa.com", timeout=5)
+        response = requests.get("https://sandbox.shepa.com", timeout=3)
         if response.status_code >= 500:
             flash("Shepa.com is currently experiencing server issues. Please try again later.", "danger")
+            log = ShepaStatusLog(status="DOWN", message=f"HTTP {response.status_code}",user_id=current_user.id)  # ✅ use logged-in user
+            db.session.add(log)
+            db.session.commit()
             return False
+        # Log successful status
+        log = ShepaStatusLog(status="UP", message="Service available",user_id=current_user.id)  # ✅ use logged-in user
+        db.session.add(log)
+        db.session.commit()
         return True
-    except requests.RequestException:
+    except requests.RequestException as e:
         flash("Cannot connect to Shepa.com to make a payment. It may be down. Please try again later.", "danger")
+        log = ShepaStatusLog(status="DOWN", message=str(e),user_id=current_user.id)  # ✅ use logged-in user
+        db.session.add(log)
+        db.session.commit()
         return False
 
 # Added
@@ -35,8 +48,8 @@ import requests
 import config
 import logging
 
-
-app = Blueprint("user", __name__)
+# user_bp = Blueprint("user", __name__, url_prefix="/user")
+user_bp = Blueprint("user", __name__)
 
 def apply_coupon(coupon_code, cart):
     discount_percent = 0
@@ -65,12 +78,12 @@ def apply_coupon(coupon_code, cart):
 
     return discounted_total
 
-
-@app.app_template_filter('ceil')
+@user_bp.app_template_filter('ceil')
+# @app.app_template_filter('ceil')
 def ceil_filter(value):
     return math.ceil(value)
-
-@app.route('/user/login', methods=['GET', 'POST'])
+@user_bp.route('/user/login', methods=['GET', 'POST'])
+# @user.route('/user/login', methods=['GET', 'POST'])
 def login():  # put application's code here
     if request.method == 'GET':
         if current_user.is_authenticated:
@@ -108,7 +121,7 @@ def login():  # put application's code here
 
 
 
-@app.route('/add-to-cart', methods=['GET'])
+@user_bp.route('/user/add-to-cart', methods=['GET'])
 @login_required
 def add_to_cart():
     id = request.args.get('id')
@@ -138,7 +151,7 @@ def add_to_cart():
 
 
 # ----------------------------------------------------------------------------
-@app.route('/remove-from-cart', methods=['GET'])
+@user_bp.route('/user/remove-from-cart', methods=['GET'])
 @login_required
 def remove_from_cart():
     id = request.args.get('id')
@@ -152,7 +165,7 @@ def remove_from_cart():
 
 
 # ----------------------------------------------------------------------------
-@app.route('/user/cart', methods=['GET', 'POST'])
+@user_bp.route('/user/cart', methods=['GET', 'POST'])
 @login_required
 def cart():
     cart = current_user.carts.filter(Cart.status == 'pending').first()
@@ -171,54 +184,8 @@ def cart():
          # Retrieve discounted total price from session
         discounted_total = session.get('discounted_total',cart.total_price())
     return render_template('user/cart.html', cart=cart, discounted_total=discounted_total)
-
-
-
-# ---------------------------------------------------------------------------------
-
-
-# @app.route('/payment', methods=['GET'])
-# @login_required
-# def payment():
-#     cart = current_user.carts.filter(Cart.status == 'pending').first()
-#     total_price = getattr(cart, 'discounted_total', cart.total_price())
-
-#     try:
-#         r = requests.post(config.PAYMENT_FIRST_REQUEST_URL,
-#                           data={
-#                               'api': config.PAYMENT_MERCHANT,
-#                               'amount': total_price,
-#                               'callback': config.PAYMENT_CALLBACK
-#                           })
-#         r.raise_for_status()
-#         response_json = r.json()
-
-#         if 'result' not in response_json:
-#             flash('Payment request failed: unexpected response structure', 'danger')
-#             return redirect(url_for('cart'))
-
-#         token = response_json['result']['token']
-#         url = response_json['result']['url']
-
-#         pay = Payment(price=total_price, token=token)
-#         pay.cart = cart
-#         db.session.add(pay)
-#         db.session.commit()
-
-#         return redirect(url)
-#     except requests.exceptions.RequestException as e:
-#         flash(f'Payment request failed: {str(e)}', 'danger')
-#         return redirect(url_for('cart'))
-#     except ValueError as e:
-#         flash(f'Payment request failed: invalid response from server', 'danger')
-#         return redirect(url_for('cart'))
-# -------------------------------------------------------------------
-
 # ------------------------------------------------------
-
-
-
-@app.route('/payment', methods=['GET'])
+@user_bp.route('/payment', methods=['GET'])
 @login_required
 def payment():
     cart = current_user.carts.filter(Cart.status == 'pending').first()
@@ -226,14 +193,22 @@ def payment():
     if not cart:
         flash('No pending cart found.', 'danger')
         return redirect(url_for('user.cart'))  # Ensure you have a 'cart' route
-    # Check Shepa availability before calling their API
-    if not check_shepa_status():
+    
+    if not check_shepa_status(): # Check Shepa availability before calling their API
+        flash('No Shepa.com availability.', 'danger')
+        
+        amount=session.get('discounted_total', cart.total_price())
+        pay = Payment(price=amount, token="504 Gateway Timeout")
+        pay.cart = cart
+        pay.status="error"
+        pay.cart_id= cart
+        
+        db.session.add(pay)
+        db.session.commit()
         return redirect(url_for('user.cart'))
 
     try:
-        # discounted_total = request.args.get('discounted_total')
-        # amount=discounted_total
-        # if  amount is None:
+        
         discounted_total = session.get('discounted_total', cart.total_price())
         amount=discounted_total 
 
@@ -293,7 +268,7 @@ def payment():
     
 
 
-@app.route('/verify', methods=['GET'])
+@user_bp.route('/verify', methods=['GET'])
 @login_required
 def verify():
     token = request.args.get('token')
@@ -348,7 +323,7 @@ def verify():
 
 
 # -------------------------------------------------------------------------
-@app.route('/user/dashboard', methods=['GET', 'POST'])
+@user_bp.route('/user/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     if request.method=='GET':
@@ -369,14 +344,14 @@ def dashboard():
         return redirect(url_for('user.dashboard'))
 
 
-@app.route('/user/logout', methods=['GET'])
+@user_bp.route('/user/logout', methods=['GET'])
 @login_required
 def logout():
     logout_user()
     flash('Logout was successful')
     return redirect('/')
 
-@app.route('/user/dashboard/order/<id>', methods=['GET'])
+@user_bp.route('/user/dashboard/order/<id>', methods=['GET'])
 @login_required
 def order(id):
     cart = current_user.carts.filter(Cart.id == id).first_or_404()
@@ -400,3 +375,4 @@ def order(id):
 
 # Added
 
+# user = Blueprint("user", __name__)

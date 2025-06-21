@@ -6,14 +6,14 @@ from wtforms.validators import InputRequired, length,AnyOf
 from flask_wtf.csrf import CSRFProtect
 import config
 import extensions
-from blueprints.general import app as general
-from blueprints.admin import app as admin
-from blueprints.user import app as user, check_shepa_status
+from blueprints.general import app as general_bp
+from blueprints.admin import  admin_bp
+from blueprints.user import  user_bp, check_shepa_status
 
 from flask_login import LoginManager
 
 from models.user import User
-
+# from blueprints.admin import admin  # adjust based on your folder structure
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 app.config['SECRET_KEY'] = config.SECRET_KEY
@@ -25,9 +25,10 @@ app.config["RECAPTCHA_PRIVATE_KEY"] = config.RECAPTCHA_PRIVATE_KEY
 # app.config["VERIFY_URL"] = config.VERIFY_URL
 # app.config['TESTING']=True
 
-app.register_blueprint(general)
-app.register_blueprint(admin)
-app.register_blueprint(user)
+app.register_blueprint(general_bp)
+app.register_blueprint(admin_bp)
+app.register_blueprint(user_bp)
+
 
 
 csrf = CSRFProtect(app)

@@ -28,3 +28,5 @@ class Payment(db.Model):
 
         if self.status == "failed":
             return "عدم موفق"
+        if self.status == "error":
+            return "خطای اتصال به بانک"

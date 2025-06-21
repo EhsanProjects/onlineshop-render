@@ -18,24 +18,49 @@ from models.product_discount import ProductDiscount
 from models.product_set import ProductSet
 from models.user import User
 
-app = Blueprint("admin", __name__)
-
+# app = Blueprint("admin", __name__)
+# admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
+admin_bp = Blueprint("admin", __name__)
 # # Added
 # RECAPTCHA_PUBLIC_KEY = '6LdUuQcqAAAAAH4IoOikoKuVH7NJhSBbaCH_86MD'
 # RECAPTCHA_PRIVATE_KEY ='6LdUuQcqAAAAACN8W0_IUxBJPMLC6sgzwpaq4H8l'
-
-@app.before_request
-def before_request():
-    # print(request.endpoint)
-    if session.get('admin_login', None) is None and request.endpoint != "admin.login":
-        abort(403)
 # Added
 class LoginForm(FlaskForm):
     username = StringField('Username',validators=[InputRequired('User is required!'),length(min=5,max=10,message='Must be between 5 and 10 characters')])
     password = PasswordField('Password', validators=[InputRequired('Password is required!')])
     recaptcha = RecaptchaField()
+# @admin_bp.before_app_request
+# def before_request():
+#     if session.get('admin_login') is None and request.endpoint and request.endpoint.startswith("admin."):
+#         abort(403)
+@admin_bp.before_request
+def admin_auth_check():
+    allowed_routes = ["admin.login"]  # Let login page be accessible
 
-@app.route('/admin/login', methods=["POST", "GET"])
+    if request.endpoint in allowed_routes:
+        return
+
+    admin_logged_in = session.get('admin_login')
+    login_time = session.get('admin_login_time')
+
+    # Not logged in
+    if not admin_logged_in or not login_time:
+        flash("login required", "warning")
+        return redirect(url_for("user.login"))
+
+    # Check session timeout (300 seconds=5 minute)
+    now = datetime.utcnow().timestamp()
+    if now - login_time > 300:
+        session.pop('admin_login', None)
+        session.pop('admin_login_time', None)
+        flash("Admin session expired. Please log in again.", "warning")
+        return redirect(url_for("admin.login"))
+
+    # ✅ Refresh session time if still valid
+    session['admin_login_time'] = datetime.utcnow().timestamp()
+
+
+@admin_bp.route('/admin/login', methods=["POST", "GET"])
 def login():
     login = LoginForm()
     if login.validate_on_submit():
@@ -43,27 +68,13 @@ def login():
         password = request.form.get('password', None)
         if username == config.ADMIN_USERNAME and password == config.ADMIN_PASSWORD:
             session['admin_login'] = username
+            session['admin_login_time'] = datetime.utcnow().timestamp()  # Save login time
             return redirect("/admin/dashboard")
         else:
-            return redirect("/admin/login")
+            flash("Wrong credentials", "danger")
     return render_template("/admin/login.html",login=login)
-    # if request.method == "POST":
-
-    #     # Added
-    #     # print(request.form)
-    #     # secret_response = request.form['g-recaptcha-response']
-    #     # verify_response = requests.post(url=f'{{VERIFY_URL}}?secret={{SECRET_KEY_RECAPTCHA}}&response={secret_response}').json()
-    #     # print(verify_response)
-    #     # if verify_response['success'] == False or verify_response['score'] <0.5:
-    #     #     abort(401)
-
-
-
-    # else:
-    #     return render_template("/admin/login.html")
-
-
-@app.route('/admin/dashboard', methods=["GET"])
+    
+@admin_bp.route('/admin/dashboard', methods=["GET"])
 def dashboard():
     sort_by = request.args.get('sort_by', 'username')  # Default to 'username'
     sort_order = request.args.get('sort_order', 'asc')
@@ -105,7 +116,7 @@ def dashboard():
     # orders = db.session.query(Cart).join(User).order_by(sort_column).all()
     # return render_template('admin/dashboard.html', carts=orders)
 
-@app.route('/admin/order_details', methods=["GET"])
+@admin_bp.route('/admin/order_details', methods=["GET"])
 def order_details():
     username = request.args.get('username')
     status = request.args.get('status')
@@ -232,7 +243,7 @@ def dashboard_with_details(detailed_orders):
 
 # ------------------------------------------------------------------------------
 
-@app.route('/admin/dashboard/order/<id>', methods=["GET", "POST"])
+@admin_bp.route('/admin/dashboard/order/<id>', methods=["GET", "POST"])
 def order(id):
     cart = Cart.query.filter(Cart.id == id).first_or_404()
     if request.method == "GET":
@@ -261,7 +272,7 @@ def order(id):
         return redirect(url_for('admin.order', id=id))
 
 
-@app.route('/admin/dashboard/products', methods=["GET", "POST"])
+@admin_bp.route('/admin/dashboard/products', methods=["GET", "POST"])
 def products():
     if request.method == "GET":
         products = Product.query.all()
@@ -302,7 +313,7 @@ def products():
         return redirect(url_for("admin.products"))
 
 
-@app.route('/admin/dashboard/edit-product/<id>', methods=["GET", "POST"])
+@admin_bp.route('/admin/dashboard/edit-product/<id>', methods=["GET", "POST"])
 def edit_product(id):
     product = Product.query.filter(Product.id == id).first_or_404()
     productset = ProductSet.query.filter(ProductSet.product_id == id).first_or_404()
@@ -364,7 +375,7 @@ def edit_product(id):
 
 
 # Added
-@app.route('/admin/dashboard/delete-product/<id>', methods=["GET", "POST"])
+@admin_bp.route('/admin/dashboard/delete-product/<id>', methods=["GET", "POST"])
 def delete_product(id):
     product = Product.query.filter(Product.id == id).first_or_404()
     if request.method == "GET":
@@ -403,7 +414,7 @@ def delete_product(id):
         # return redirect(url_for("admin.products"))
 
 
-@app.route('/admin/dashboard/discount', methods=["GET", "POST"])
+@admin_bp.route('/admin/dashboard/discount', methods=["GET", "POST"])
 def discounts():
     if request.method == "GET":
       
@@ -439,7 +450,7 @@ def discounts():
 
 
 
-@app.route('/admin/dashboard/edit-discount/<id>', methods=["GET", "POST"])
+@admin_bp.route('/admin/dashboard/edit-discount/<id>', methods=["GET", "POST"])
 def edit_discount(id):
     discount = ProductDiscount.query.filter(ProductDiscount.id == id).first_or_404()
     if request.method == "GET":
@@ -461,7 +472,7 @@ def edit_discount(id):
         return redirect(url_for("admin.discounts"))
 
 
-@app.route('/admin/dashboard/coupons', methods=['GET', 'POST'])
+@admin_bp.route('/admin/dashboard/coupons', methods=['GET', 'POST'])
 def manage_coupons():
     if request.method == "GET":
         coupons = Coupon.query.all()
@@ -492,3 +503,5 @@ def manage_coupons():
             return redirect(url_for('admin.manage_coupons'))
 
     
+# At the bottom of admin.py
+__all__ = ['admin_bp']
